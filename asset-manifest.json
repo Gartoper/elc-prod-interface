@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/elc-prod-interface/static/css/main.de9091a1.css",
-    "main.js": "/elc-prod-interface/static/js/main.556ead6a.js",
+    "main.css": "/elc-prod-interface/static/css/main.51504335.css",
+    "main.js": "/elc-prod-interface/static/js/main.d889998d.js",
     "static/media/logo-elc.png": "/elc-prod-interface/static/media/logo-elc.a4e447ecf9a39a08fd44.png",
     "index.html": "/elc-prod-interface/index.html",
-    "main.de9091a1.css.map": "/elc-prod-interface/static/css/main.de9091a1.css.map",
-    "main.556ead6a.js.map": "/elc-prod-interface/static/js/main.556ead6a.js.map"
+    "main.51504335.css.map": "/elc-prod-interface/static/css/main.51504335.css.map",
+    "main.d889998d.js.map": "/elc-prod-interface/static/js/main.d889998d.js.map"
   },
   "entrypoints": [
-    "static/css/main.de9091a1.css",
-    "static/js/main.556ead6a.js"
+    "static/css/main.51504335.css",
+    "static/js/main.d889998d.js"
   ]
 }
