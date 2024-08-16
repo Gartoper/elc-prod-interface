@@ -45,7 +45,7 @@ export function Panel() {
 
   const CustomTeamToggle = React.forwardRef(({ children, onClick }, ref) => (
     <Dropdown.Toggle
-      variant="light"
+      variant="dark"
       size="lg"
       ref={ref}
       onClick={(e) => {
@@ -60,7 +60,7 @@ export function Panel() {
   const CustomHostToggle = React.forwardRef(({ children, onClick }, ref) => (
     <InputGroup>
       <Dropdown.Toggle
-        variant="light"
+        variant="dark"
         size="lg"
         ref={ref}
         onClick={(e) => {
@@ -97,7 +97,7 @@ export function Panel() {
   const CustomCaster1Toggle = React.forwardRef(({ children, onClick }, ref) => (
     <InputGroup>
       <Dropdown.Toggle
-        variant="light"
+        variant="dark"
         size="lg"
         ref={ref}
         onClick={(e) => {
@@ -134,7 +134,7 @@ export function Panel() {
   const CustomCaster2Toggle = React.forwardRef(({ children, onClick }, ref) => (
     <InputGroup>
       <Dropdown.Toggle
-        variant="light"
+        variant="dark"
         size="lg"
         ref={ref}
         onClick={(e) => {
@@ -171,7 +171,7 @@ export function Panel() {
   const CustomAnalystToggle = React.forwardRef(({ children, onClick }, ref) => (
     <InputGroup>
       <Dropdown.Toggle
-        variant="light"
+        variant="dark"
         size="lg"
         ref={ref}
         onClick={(e) => {
@@ -209,7 +209,7 @@ export function Panel() {
     ({ children, onClick }, ref) => (
       <InputGroup>
         <Dropdown.Toggle
-          variant="light"
+          variant="dark"
           size="lg"
           ref={ref}
           onClick={(e) => {
@@ -248,7 +248,7 @@ export function Panel() {
     ({ children, onClick }, ref) => (
       <InputGroup>
         <Dropdown.Toggle
-          variant="light"
+          variant="dark"
           size="lg"
           ref={ref}
           onClick={(e) => {

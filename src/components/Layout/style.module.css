@@ -4,9 +4,8 @@
 }
 
 .main_content {
-    background-color: #ffffff;
     width: 87.5% !important;
-    /*scrollbar-color: #454a4d #202324;
-    background-color: #202124;
-    color: #e8e6e3;*/
+    scrollbar-color: #454a4d #202324;
+    background-color: #1a1b1c;
+    color: #e8e6e3;
 }

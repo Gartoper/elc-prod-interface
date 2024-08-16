@@ -289,6 +289,7 @@ export function Heros() {
         </tbody>
       </Table>
       <Modal
+        data-bs-theme="dark"
         show={showAddModal}
         onHide={() => {
           showUpdateModal ? handleCloseUpdateModal() : handleCloseAddModal();
@@ -297,7 +298,9 @@ export function Heros() {
       >
         <Form onSubmit={saveData}>
           <Modal.Header closeButton>
-            <Modal.Title>Ajouter un héro</Modal.Title>
+            <Modal.Title style={{ color: 'white' }} className="fs-3">
+              Ajouter un héro
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Col xs={12}>

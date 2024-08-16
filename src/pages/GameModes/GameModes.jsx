@@ -293,6 +293,7 @@ export function GameModes() {
         </tbody>
       </Table>
       <Modal
+        data-bs-theme="dark"
         show={showAddModal}
         onHide={() => {
           showUpdateModal ? handleCloseUpdateModal() : handleCloseAddModal();
@@ -301,7 +302,9 @@ export function GameModes() {
       >
         <Form onSubmit={saveData}>
           <Modal.Header closeButton>
-            <Modal.Title>Ajouter un mode de jeu</Modal.Title>
+            <Modal.Title style={{ color: 'white' }} className="fs-3">
+              Ajouter un mode de jeu
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Col xs={12}>

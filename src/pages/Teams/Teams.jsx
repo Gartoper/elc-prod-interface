@@ -346,6 +346,7 @@ export function Teams() {
         </tbody>
       </Table>
       <Modal
+        data-bs-theme="dark"
         show={showAddModal}
         onHide={() => {
           showUpdateModal ? handleCloseUpdateModal() : handleCloseAddModal();
@@ -354,7 +355,9 @@ export function Teams() {
       >
         <Form onSubmit={saveData}>
           <Modal.Header closeButton>
-            <Modal.Title>Ajouter une équipe</Modal.Title>
+            <Modal.Title style={{ color: 'white' }} className="fs-3">
+              Ajouter une équipe
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Col xs={12}>

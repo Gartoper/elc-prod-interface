@@ -1,0 +1,12 @@
+.overwatch2_card {
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+.overwatch2_card:hover {
+    background-color: #121314;
+}
+
+.valorant_card {
+
+}
