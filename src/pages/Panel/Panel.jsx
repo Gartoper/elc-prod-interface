@@ -29,7 +29,7 @@ import {
 } from 'firebase/database';
 
 export function Panel() {
-  const [intervenantArray, setIntervenantArray] = useState([]);
+  const [broadcastTalentArray, setBroadcastTalentArray] = useState([]);
   const [formatArray, setFormatArray] = useState([]);
   const [currentHost, setCurrentHost] = useState('');
   const [currentCaster1, setCurrentCaster1] = useState('');
@@ -312,9 +312,9 @@ export function Panel() {
     }
   );
 
-  const CustomIntervenantSearchMenu = React.forwardRef(
+  const CustomBroadcastTalentSearchMenu = React.forwardRef(
     ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
-      const [intervenantValue, setIntervenantValue] = useState('');
+      const [broadcastTalentValue, setBroadcastTalentValue] = useState('');
 
       return (
         <div
@@ -327,14 +327,18 @@ export function Panel() {
             autoFocus
             className="mx-3 my-2 w-auto"
             placeholder="Taper le nom de l'intervenant..."
-            onChange={(e) => setIntervenantValue(e.target.value.toLowerCase())}
-            value={intervenantValue}
+            onChange={(e) =>
+              setBroadcastTalentValue(e.target.value.toLowerCase())
+            }
+            value={broadcastTalentValue}
           />
           <ul className="list-unstyled">
             {React.Children.toArray(children).filter(
               (child) =>
-                !intervenantValue ||
-                child.props.children.toLowerCase().includes(intervenantValue)
+                !broadcastTalentValue ||
+                child.props.children
+                  .toLowerCase()
+                  .includes(broadcastTalentValue)
             )}
           </ul>
         </div>
@@ -344,13 +348,13 @@ export function Panel() {
 
   useEffect(() => {
     const db = getDatabase();
-    const dbRef = ref(db, '0/intervenants/0');
+    const dbRef = ref(db, '0/broadcastTalents/0');
     const dbFormatRef = ref(db, '0/formats/0');
     const dbScoreMatchRef = ref(db, '0/panel/0/mappool/scoreMatch');
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setIntervenantArray(Object.values(data));
+      setBroadcastTalentArray(Object.values(data));
     });
 
     onValue(dbFormatRef, (snapshot) => {
@@ -491,12 +495,14 @@ export function Panel() {
     });
   }
 
-  async function saveHost(intervenant) {
+  async function saveHost(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/host');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -511,12 +517,14 @@ export function Panel() {
       });
   }
 
-  async function saveCaster1(intervenant) {
+  async function saveCaster1(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/caster1');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -531,12 +539,14 @@ export function Panel() {
       });
   }
 
-  async function saveCaster2(intervenant) {
+  async function saveCaster2(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/caster2');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -551,12 +561,14 @@ export function Panel() {
       });
   }
 
-  async function saveAnalyst(intervenant) {
+  async function saveAnalyst(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/analyst');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -571,12 +583,14 @@ export function Panel() {
       });
   }
 
-  async function saveInterview1(intervenant) {
+  async function saveInterview1(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/itw1');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -591,12 +605,14 @@ export function Panel() {
       });
   }
 
-  async function saveInterview2(intervenant) {
+  async function saveInterview2(broadcastTalent) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/broadcastTalent/0/itw2');
 
-    let pseudoValue = intervenant === '' ? '' : intervenant.nameIntervenant;
-    let twitterValue = intervenant === '' ? '' : intervenant.twitterIntervenant;
+    let pseudoValue =
+      broadcastTalent === '' ? '' : broadcastTalent.nameBroadcastTalent;
+    let twitterValue =
+      broadcastTalent === '' ? '' : broadcastTalent.twitterBroadcastTalent;
 
     set(newDocRef, {
       pseudo: pseudoValue,
@@ -971,22 +987,22 @@ export function Panel() {
         <Row className="my-3">
           <Row>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>Host</h3>
+              <h3 className={s.broadcast_talent_title}>Host</h3>
             </Col>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>Caster #1</h3>
+              <h3 className={s.broadcast_talent_title}>Caster #1</h3>
             </Col>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>Caster #2</h3>
+              <h3 className={s.broadcast_talent_title}>Caster #2</h3>
             </Col>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>Analyste</h3>
+              <h3 className={s.broadcast_talent_title}>Analyste</h3>
             </Col>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>ITW #1</h3>
+              <h3 className={s.broadcast_talent_title}>ITW #1</h3>
             </Col>
             <Col xs={2}>
-              <h3 className={s.intervenant_title}>ITW #2</h3>
+              <h3 className={s.broadcast_talent_title}>ITW #2</h3>
             </Col>
           </Row>
           <Row>
@@ -995,21 +1011,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomHostToggle}>
                     {currentHost === '' ? (
-                      <span className={s.no_intervenant_txt}>Pas de Host</span>
+                      <span className={s.no_broadcast_talent_txt}>
+                        Pas de Host
+                      </span>
                     ) : (
                       <span>{currentHost}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentHost(item.nameIntervenant);
+                          setCurrentHost(item.nameBroadcastTalent);
                           saveHost(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -1021,23 +1039,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomCaster1Toggle}>
                     {currentCaster1 === '' ? (
-                      <span className={s.no_intervenant_txt}>
+                      <span className={s.no_broadcast_talent_txt}>
                         Pas de Caster #1
                       </span>
                     ) : (
                       <span>{currentCaster1}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentCaster1(item.nameIntervenant);
+                          setCurrentCaster1(item.nameBroadcastTalent);
                           saveCaster1(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -1049,23 +1067,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomCaster2Toggle}>
                     {currentCaster2 === '' ? (
-                      <span className={s.no_intervenant_txt}>
+                      <span className={s.no_broadcast_talent_txt}>
                         Pas de Caster #2
                       </span>
                     ) : (
                       <span>{currentCaster2}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentCaster2(item.nameIntervenant);
+                          setCurrentCaster2(item.nameBroadcastTalent);
                           saveCaster2(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -1077,23 +1095,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomAnalystToggle}>
                     {currentAnalyst === '' ? (
-                      <span className={s.no_intervenant_txt}>
+                      <span className={s.no_broadcast_talent_txt}>
                         Pas d'Analyste
                       </span>
                     ) : (
                       <span>{currentAnalyst}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentAnalyst(item.nameIntervenant);
+                          setCurrentAnalyst(item.nameBroadcastTalent);
                           saveAnalyst(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -1105,23 +1123,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomInterview1Toggle}>
                     {currentInterview1 === '' ? (
-                      <span className={s.no_intervenant_txt}>
+                      <span className={s.no_broadcast_talent_txt}>
                         Pas d'Interviewer #1
                       </span>
                     ) : (
                       <span>{currentInterview1}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentInterview1(item.nameIntervenant);
+                          setCurrentInterview1(item.nameBroadcastTalent);
                           saveInterview1(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
@@ -1133,23 +1151,23 @@ export function Panel() {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomInterview2Toggle}>
                     {currentInterview2 === '' ? (
-                      <span className={s.no_intervenant_txt}>
+                      <span className={s.no_broadcast_talent_txt}>
                         Pas d'Interviewer #2
                       </span>
                     ) : (
                       <span>{currentInterview2}</span>
                     )}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu as={CustomIntervenantSearchMenu}>
-                    {intervenantArray.map((item, index) => (
+                  <Dropdown.Menu as={CustomBroadcastTalentSearchMenu}>
+                    {broadcastTalentArray.map((item, index) => (
                       <Dropdown.Item
                         key={index}
                         onClick={() => {
-                          setCurrentInterview2(item.nameIntervenant);
+                          setCurrentInterview2(item.nameBroadcastTalent);
                           saveInterview2(item);
                         }}
                       >
-                        {item.nameIntervenant}
+                        {item.nameBroadcastTalent}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>

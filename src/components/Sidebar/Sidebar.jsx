@@ -52,7 +52,7 @@ export function Sidebar() {
       </li>
       <li>
         <NavLink
-          to="/intervenants"
+          to="/broadcast-talents"
           style={({ isActive }) => {
             return {
               color: isActive ? '#da0000' : '#ffffff',
