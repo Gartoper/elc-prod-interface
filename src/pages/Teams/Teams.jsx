@@ -20,7 +20,7 @@ import {
   remove,
 } from 'firebase/database';
 
-export function Equipes() {
+export function Teams() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [inputValue3, setInputValue3] = useState('');
@@ -28,7 +28,7 @@ export function Equipes() {
   const [inputValue5, setInputValue5] = useState('');
   const [inputValue6, setInputValue6] = useState('');
   const [inputValue7, setInputValue7] = useState('');
-  const [equipeArray, setEquipeArray] = useState([]);
+  const [teamArray, setTeamArray] = useState([]);
   const [currentTeamID, setCurrentTeamID] = useState('');
   const [currentTeam, setCurrentTeam] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -84,26 +84,26 @@ export function Equipes() {
 
   async function fetchData() {
     const db = getDatabase(app);
-    const dbRef = ref(db, '0/equipes/0');
+    const dbRef = ref(db, '0/teams/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setEquipeArray(Object.values(data));
+      setTeamArray(Object.values(data));
     });
   }
 
   async function updateData() {
     const db = getDatabase(app);
-    const dbRef = ref(db, '0/equipes/0');
+    const dbRef = ref(db, '0/teams/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       const tmpArray = Object.keys(data).map((objectId) => {
         return {
           ...data[objectId],
-          idEquipe: objectId,
+          idTeam: objectId,
         };
       });
 
-      setEquipeArray(tmpArray);
+      setTeamArray(tmpArray);
     });
   }
 
@@ -126,22 +126,22 @@ export function Equipes() {
       const db = getDatabase(app);
       let newDocRef;
       if (showUpdateModal) {
-        newDocRef = ref(db, '0/equipes/0/' + currentTeamID);
+        newDocRef = ref(db, '0/teams/0/' + currentTeamID);
       } else {
-        newDocRef = push(ref(db, '0/equipes/0'));
+        newDocRef = push(ref(db, '0/teams/0'));
       }
 
       setTeamDefaultLogo();
 
       if (inputValue1 !== '' && inputValue2 !== '') {
         set(newDocRef, {
-          nameEquipe: inputValue1,
-          shortNameEquipe: inputValue2,
-          imgUrlEquipe: inputValue3,
-          colorEquipe: inputValue4,
-          scoreEquipe: inputValue5,
-          palmaresEquipe: inputValue6,
-          commentaireEquipe: inputValue7,
+          name: inputValue1,
+          shortName: inputValue2,
+          imgUrl: inputValue3,
+          color: inputValue4,
+          score: inputValue5,
+          palmares: inputValue6,
+          commentary: inputValue7,
           players: rosterData,
         })
           .then(() => {
@@ -169,7 +169,7 @@ export function Equipes() {
 
   async function deleteData(idTeam) {
     const db = getDatabase(app);
-    const dbRef = ref(db, '0/equipes/0/' + idTeam);
+    const dbRef = ref(db, '0/teams/0/' + idTeam);
     await remove(dbRef)
       .then(() => {
         toast.success('Equipe supprimée');
@@ -225,15 +225,15 @@ export function Equipes() {
           </tr>
         </thead>
         <tbody>
-          {equipeArray.map((item, index) => (
+          {teamArray.map((item, index) => (
             <tr key={index}>
-              <td>{item.nameEquipe}</td>
+              <td>{item.name}</td>
               <td>
                 <img
-                  src={item.imgUrlEquipe}
+                  src={item.imgUrl}
                   height={70}
                   width={70}
-                  alt={item.nameEquipe}
+                  alt={item.name}
                   className="object-fit-contain"
                 />
               </td>
@@ -253,19 +253,19 @@ export function Equipes() {
               </td>
               <td>
                 <Row xs={12} className="mx-2">
-                  Couleur: {item.colorEquipe}
+                  Couleur: {item.color}
                 </Row>
                 <Row xs={12} className="mx-2">
-                  Abbréviation: {item.shortNameEquipe}
+                  Abbréviation: {item.shortName}
                 </Row>
                 <Row xs={12} className="mx-2">
-                  Score/Rank: {item.scoreEquipe}
+                  Score/Rank: {item.score}
                 </Row>
                 <Row xs={12} className="mx-2 mt-4 mb-4">
-                  Palmarès: {item.palmaresEquipe}
+                  Palmarès: {item.palmares}
                 </Row>
                 <Row xs={12} className="mx-2">
-                  Commentaires: {item.commentaireEquipe}
+                  Commentaires: {item.commentary}
                 </Row>
               </td>
               <td>
@@ -275,14 +275,14 @@ export function Equipes() {
                   onClick={() => {
                     handleShowUpdateModal();
                     setCurrentTeam(item);
-                    setCurrentTeamID(item.idEquipe);
-                    setInputValue1(item.nameEquipe);
-                    setInputValue2(item.shortNameEquipe);
-                    setInputValue3(item.imgUrlEquipe);
-                    setInputValue4(item.colorEquipe);
-                    setInputValue5(item.scoreEquipe);
-                    setInputValue6(item.palmaresEquipe);
-                    setInputValue7(item.commentaireEquipe);
+                    setCurrentTeamID(item.idTeam);
+                    setInputValue1(item.name);
+                    setInputValue2(item.shortName);
+                    setInputValue3(item.imgUrl);
+                    setInputValue4(item.color);
+                    setInputValue5(item.score);
+                    setInputValue6(item.palmares);
+                    setInputValue7(item.commentary);
                     setRosterData(item.players);
                   }}
                 >
@@ -305,7 +305,7 @@ export function Equipes() {
                   className={s.delete_button}
                   variant="danger"
                   onClick={() => {
-                    deleteData(item.idEquipe);
+                    deleteData(item.idTeam);
                   }}
                 >
                   <svg

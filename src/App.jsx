@@ -7,8 +7,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Layout } from './components/Layout/Layout';
 import { Error } from './pages/Error/Error';
 import { Intervenants } from './pages/Intervenants/Intervenants';
-import { Equipes } from './pages/Equipes/Equipes';
+import { Teams } from './pages/Teams/Teams';
 import { Panel } from './pages/Panel/Panel';
+import { Home } from './pages/Home/Home';
 import { Heros } from './pages/Heros/Heros';
 import { Roles } from './pages/Roles/Roles';
 import { GameModes } from './pages/GameModes/GameModes';
@@ -25,10 +26,10 @@ export function App() {
       />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Panel />} />
-          <Route path="panel" element={<Panel />} />
+          <Route index element={<Home />} />
+          <Route path="/panel" element={<Panel />} />
           <Route path="intervenants" element={<Intervenants />} />
-          <Route path="equipes" element={<Equipes />} />
+          <Route path="teams" element={<Teams />} />
           <Route path="heros" element={<Heros />} />
           <Route path="roles" element={<Roles />} />
           <Route path="maps" element={<Maps />} />

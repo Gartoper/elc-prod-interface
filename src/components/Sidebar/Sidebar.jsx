@@ -30,7 +30,7 @@ export function Sidebar() {
       </li>
       <li>
         <NavLink
-          to="/equipes"
+          to="/teams"
           style={({ isActive }) => {
             return {
               color: isActive ? '#da0000' : '#ffffff',

@@ -23,6 +23,9 @@ import {
   get,
   child,
   onValue,
+  query,
+  orderByChild,
+  equalTo,
 } from 'firebase/database';
 
 export function Panel() {
@@ -377,7 +380,7 @@ export function Panel() {
 
   useEffect(() => {
     const db = getDatabase();
-    const dbTeamsRef = ref(db, '0/equipes/0');
+    const dbTeamsRef = ref(db, '0/teams/0');
 
     onValue(dbTeamsRef, (snapshot) => {
       const data = snapshot.val();
@@ -632,13 +635,13 @@ export function Panel() {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/team1');
 
-    let nameValue = team === '' ? '' : team.nameEquipe;
-    let shortNameValue = team === '' ? '' : team.shortNameEquipe;
-    let imgUrlValue = team === '' ? '' : team.imgUrlEquipe;
-    let colorValue = team === '' ? '' : team.colorEquipe;
-    let scoreValue = team === '' ? '' : team.scoreEquipe;
-    let palmaresValue = team === '' ? '' : team.palmaresEquipe;
-    let commentaireValue = team === '' ? '' : team.commentaireEquipe;
+    let nameValue = team === '' ? '' : team.name;
+    let shortNameValue = team === '' ? '' : team.shortName;
+    let imgUrlValue = team === '' ? '' : team.imgUrl;
+    let colorValue = team === '' ? '' : team.color;
+    let scoreValue = team === '' ? '' : team.score;
+    let palmaresValue = team === '' ? '' : team.palmares;
+    let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
 
     set(newDocRef, {
@@ -648,7 +651,7 @@ export function Panel() {
       color: colorValue,
       score: scoreValue,
       palmares: palmaresValue,
-      commentaire: commentaireValue,
+      commentary: commentaryValue,
       players: playersValue,
     })
       .then(() => {
@@ -666,13 +669,13 @@ export function Panel() {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/team2');
 
-    let nameValue = team === '' ? '' : team.nameEquipe;
-    let shortNameValue = team === '' ? '' : team.shortNameEquipe;
-    let imgUrlValue = team === '' ? '' : team.imgUrlEquipe;
-    let colorValue = team === '' ? '' : team.colorEquipe;
-    let scoreValue = team === '' ? '' : team.scoreEquipe;
-    let palmaresValue = team === '' ? '' : team.palmaresEquipe;
-    let commentaireValue = team === '' ? '' : team.commentaireEquipe;
+    let nameValue = team === '' ? '' : team.name;
+    let shortNameValue = team === '' ? '' : team.shortName;
+    let imgUrlValue = team === '' ? '' : team.imgUrl;
+    let colorValue = team === '' ? '' : team.color;
+    let scoreValue = team === '' ? '' : team.score;
+    let palmaresValue = team === '' ? '' : team.palmares;
+    let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
 
     set(newDocRef, {
@@ -682,7 +685,7 @@ export function Panel() {
       color: colorValue,
       score: scoreValue,
       palmares: palmaresValue,
-      commentaire: commentaireValue,
+      commentary: commentaryValue,
       players: playersValue,
     })
       .then(() => {
@@ -706,7 +709,7 @@ export function Panel() {
     let colorValue = team === '' ? '' : team.color;
     let scoreValue = team === '' ? '' : team.score;
     let palmaresValue = team === '' ? '' : team.palmares;
-    let commentaireValue = team === '' ? '' : team.commentaire;
+    let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
 
     set(newDocRef, {
@@ -716,7 +719,7 @@ export function Panel() {
       color: colorValue,
       score: scoreValue,
       palmares: palmaresValue,
-      commentaire: commentaireValue,
+      commentary: commentaryValue,
       players: playersValue,
     })
       .then(() => {})
@@ -738,7 +741,7 @@ export function Panel() {
     let colorValue = team === '' ? '' : team.color;
     let scoreValue = team === '' ? '' : team.score;
     let palmaresValue = team === '' ? '' : team.palmares;
-    let commentaireValue = team === '' ? '' : team.commentaire;
+    let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
 
     set(newDocRef, {
@@ -748,7 +751,7 @@ export function Panel() {
       color: colorValue,
       score: scoreValue,
       palmares: palmaresValue,
-      commentaire: commentaireValue,
+      commentary: commentaryValue,
       players: playersValue,
     })
       .then(() => {})
@@ -831,10 +834,10 @@ export function Panel() {
   function resetPanel() {
     const db = getDatabase(app);
     const broadcastTalentRef = ref(db, '0/panel/0/broadcastTalent/0/');
-    //const formatRef = ref(db, '0/panel/0/format');
+    const teamsRef = ref(db, '0/teams/0');
     const mappoolRef = ref(db, '0/panel/0/mappool');
-    /*const team1Ref = ref(db, '0/panel/0/team1');
-    const team2Ref = ref(db, '0/panel/0/team2');*/
+    const team1Ref = ref(db, '0/panel/0/team1');
+    const team2Ref = ref(db, '0/panel/0/team2');
 
     let broadcastTalentEmptyValue = {
       pseudo: '',
@@ -881,16 +884,6 @@ export function Panel() {
       });
     });
 
-    console.log(Object.values(mappoolEmptyValue));
-
-    /*let shortNameValue = team === '' ? '' : team.shortName;
-    let imgUrlValue = team === '' ? '' : team.imgUrl;
-    let colorValue = team === '' ? '' : team.color;
-    let scoreValue = team === '' ? '' : team.score;
-    let palmaresValue = team === '' ? '' : team.palmares;
-    let commentaireValue = team === '' ? '' : team.commentaire;
-    let playersValue = team === '' ? [] : team.players;*/
-
     set(broadcastTalentRef, {
       analyst: broadcastTalentEmptyValue,
       caster1: broadcastTalentEmptyValue,
@@ -916,6 +909,41 @@ export function Panel() {
       .catch((error) => {
         console.error(
           'Erreur lors du reset du map pool dans le panel: ',
+          error.message
+        );
+      });
+
+    let teamEmptyValue = {};
+
+    onValue(teamsRef, (snapshot) => {
+      const data = snapshot.val();
+      let isFound = false;
+      for (let i = 0; i < Object.values(data).length; i++) {
+        if (isFound === true) {
+          break;
+        }
+        if (isFound === false && Object.values(data)[i].name === 'TBD') {
+          teamEmptyValue = Object.values(data)[i];
+
+          isFound = true;
+        }
+      }
+    });
+
+    set(team1Ref, teamEmptyValue)
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors du reset de team1 dans le panel: ',
+          error.message
+        );
+      });
+
+    set(team2Ref, teamEmptyValue)
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors du reset de team2 dans le panel: ',
           error.message
         );
       });
@@ -1166,10 +1194,10 @@ export function Panel() {
                                 console.log(item);
                                 setCurrentTeam1(item);
                                 saveTeam1(item);
-                                console.log(item.nameEquipe);
+                                console.log(item.name);
                               }}
                             >
-                              {item.nameEquipe}
+                              {item.name}
                             </Dropdown.Item>
                           ))}
                         </Dropdown.Menu>
@@ -1284,10 +1312,10 @@ export function Panel() {
                                 console.log(item);
                                 setCurrentTeam2(item);
                                 saveTeam2(item);
-                                console.log(item.nameEquipe);
+                                console.log(item.name);
                               }}
                             >
-                              {item.nameEquipe}
+                              {item.name}
                             </Dropdown.Item>
                           ))}
                         </Dropdown.Menu>
