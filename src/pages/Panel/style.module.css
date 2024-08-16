@@ -1,0 +1,34 @@
+.cast_setup_banner {
+    background-color: grey;
+}
+
+.control_panel {
+    background-color: #00FF00;
+    border-radius: 30px;
+}
+
+.card_title_team_name {
+    text-align: center;
+    font-weight: 600;
+}
+
+.swap_icon {
+    /*object-fit: contain;*/
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.swap_icon:hover {
+    cursor: pointer;
+}
+
+.no_intervenant_txt {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.intervenant_title {
+    text-align: center;
+}

@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.img {
+  height: 90px;
+  width: 90px;
+  margin: auto 0;
+}
+.title {
+  font-size: 30px;
+  font-weight: 500;
+  padding-top: 11px;
+  padding-left: 5px;
+}
+.subtitle {
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
+  white-space: nowrap;
+  margin-bottom: 40px;
+}

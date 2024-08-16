@@ -1,0 +1,20 @@
+th, td {
+    text-align: center;
+}
+
+.edit_button,
+.delete_button {
+    margin: 0 5px;
+}
+
+.edit_button,
+.delete_button span {
+    font-weight: 600;
+}
+
+.edit_icon, .delete_icon {
+    height: 24px;
+    width: 24px;
+    align-items: center;
+    margin-right: 4px;
+}
