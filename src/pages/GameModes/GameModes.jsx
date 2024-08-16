@@ -218,6 +218,7 @@ export function GameModes() {
                   height={70}
                   width={70}
                   alt={item.nameGamemode}
+                  className="object-fit-contain"
                 />
               </td>
               <td>

@@ -136,7 +136,7 @@ export function Sidebar() {
             xmlns="http://www.w3.org/2000/svg"
             version="1.1"
             fill="none"
-            stroke="#000000"
+            stroke="#ffffff"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.5"

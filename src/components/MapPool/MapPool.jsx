@@ -333,169 +333,192 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
         <Col />
         <Col xs="11">
           <Table striped bordered>
-            <tr>
-              <td></td>
-              {Object.values(mapPoolData).map((item, index) => (
-                <th scope="col" key={index}>
-                  Map{index + 1}
-                </th>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row">Select Mode</th>
-              {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
-                <td>
-                  <Form.Select>
-                    <option
-                      key="empty-mode"
-                      value=""
-                      onClick={() => {
-                        handleGamemodeChange(indexMapPool, '');
+            <thead>
+              <tr>
+                <td></td>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <th scope="col" key={`map-index-${index}`}>
+                    Map{index + 1}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Select Mode</th>
+                {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
+                  <td>
+                    <Form.Select
+                      onChange={(e) => {
+                        let inputGamemodeName = e.target.value;
+                        let gamemodeObject = '';
+
+                        let isFound = false;
+                        for (let i = 0; i < gamemodeArray.length; i++) {
+                          if (isFound === true) {
+                            break;
+                          }
+                          if (
+                            isFound === false &&
+                            gamemodeArray[i].nameGamemode === inputGamemodeName
+                          ) {
+                            gamemodeObject = gamemodeArray[i];
+                            isFound = true;
+                          }
+                        }
+                        handleGamemodeChange(indexMapPool, gamemodeObject);
                         setMapPoolData(Object.values(mapPoolData));
                         saveMapPool(Object.values(mapPoolData));
                       }}
-                    ></option>
-                    {gamemodeArray.map((itemGamemode, indexGamemode) => (
-                      <option
-                        key={`gamemode-${indexGamemode}`}
-                        selected={
-                          Object.values(mapPoolData)[indexMapPool].gamemodeMap
-                            .nameGamemode === itemGamemode.nameGamemode
-                        }
-                        value={itemGamemode.nameGamemode}
-                        onClick={() => {
-                          handleGamemodeChange(indexMapPool, itemGamemode);
+                    >
+                      <option key="empty-mode"></option>
+                      {gamemodeArray.map((itemGamemode, indexGamemode) => (
+                        <option
+                          key={`gamemode-${indexGamemode}`}
+                          selected={
+                            Object.values(mapPoolData)[indexMapPool].gamemodeMap
+                              .nameGamemode === itemGamemode.nameGamemode
+                          }
+                        >
+                          {itemGamemode.nameGamemode}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <td key={index}>
+                    <img
+                      src={
+                        Object.values(mapPoolData)[index].gamemodeMap
+                          .imgUrlGamemode
+                      }
+                      alt={`img-${
+                        Object.values(mapPoolData)[index].gamemodeMap
+                          .nameGamemode
+                      }`}
+                      height={60}
+                      width={60}
+                      className="object-fit-contain"
+                    />
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row">Select Map</th>
+                {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
+                  <td>
+                    <Form.Select
+                      onChange={(e) => {
+                        let inputMapName = e.target.value;
+                        let mapObject = '';
 
-                          setMapPoolData(Object.values(mapPoolData));
-                          saveMapPool(Object.values(mapPoolData));
-                        }}
-                      >
-                        {itemGamemode.nameGamemode}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              {Object.values(mapPoolData).map((item, index) => (
-                <td key={index}>
-                  <img
-                    src={
-                      Object.values(mapPoolData)[index].gamemodeMap
-                        .imgUrlGamemode
-                    }
-                    alt={`img-${
-                      Object.values(mapPoolData)[index].gamemodeMap.nameGamemode
-                    }`}
-                    height={60}
-                    width={60}
-                    className="object-fit-contain"
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row">Select Map</th>
-              {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
-                <td>
-                  <Form.Select>
-                    <option
-                      key="empty-map"
-                      value=""
-                      onClick={() => {
-                        handleMapChange(indexMapPool, '');
+                        let isFound = false;
+                        for (let i = 0; i < mapArray.length; i++) {
+                          if (isFound === true) {
+                            break;
+                          }
+                          if (
+                            isFound === false &&
+                            mapArray[i].nameMap === inputMapName
+                          ) {
+                            mapObject = mapArray[i];
+                            isFound = true;
+                          }
+                        }
+                        handleMapChange(indexMapPool, mapObject);
                         setMapPoolData(Object.values(mapPoolData));
                         saveMapPool(Object.values(mapPoolData));
                       }}
-                    ></option>
-                    {mapArray.map((itemMap, indexMap) => (
-                      <option
-                        key={`map-${indexMap}`}
-                        selected={
-                          Object.values(mapPoolData)[indexMapPool].map
-                            .nameMap === itemMap.nameMap
-                        }
-                        value={itemMap.nameMap}
-                        onClick={() => {
-                          handleMapChange(indexMapPool, itemMap);
-
-                          setMapPoolData(Object.values(mapPoolData));
-                          saveMapPool(Object.values(mapPoolData));
-                        }}
-                      >
-                        {itemMap.nameMap}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              {Object.values(mapPoolData).map((item, index) => (
-                <td key={index}>
-                  <img
-                    src={Object.values(mapPoolData)[index].map.imgUrlMap}
-                    alt={`img-${Object.values(mapPoolData)[index].map.nameMap}`}
-                    height={70}
-                    width={70}
-                    className="object-fit-cover"
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              {Object.values(mapPoolData).map((item, index) => (
-                <td key={index}>
-                  <span>
-                    {Object.values(mapPoolData)[index].resultMap.nameTeam}
-                  </span>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              {Object.values(mapPoolData).map((item, index) => (
-                <td key={index}>
-                  <img
-                    src={Object.values(mapPoolData)[index].resultMap.imgUrlTeam}
-                    alt={`winner-${
-                      Object.values(mapPoolData)[index].resultMap.nameTeam
-                    }`}
-                    height={70}
-                    width={70}
-                    className="object-fit-contain"
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <th scope="row">Map finished ?</th>
-              {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
-                <td>
-                  <Form.Check
-                    ref={refScore}
-                    aria-label={`isMap${
-                      Object.values(mapPoolData)[indexMapPool].isFinishedMap
-                    }finished`}
-                    checked={
-                      Object.values(mapPoolData)[indexMapPool].isFinishedMap
-                    }
-                    onClick={() => {
-                      handleIsFinishedChange(indexMapPool);
-                      //handleScoreMatchChange();
-                      console.log(refScore.current);
-                      setMapPoolData(Object.values(mapPoolData));
-                      saveMapPool(Object.values(mapPoolData));
-                      //saveScoreMatch(actualScore);
-                    }}
-                  />
-                </td>
-              ))}
-            </tr>
+                    >
+                      <option key="empty-map"></option>
+                      {mapArray.map((itemMap, indexMap) => (
+                        <option
+                          key={`map-${indexMap}`}
+                          selected={
+                            Object.values(mapPoolData)[indexMapPool].map
+                              .nameMap === itemMap.nameMap
+                          }
+                        >
+                          {itemMap.nameMap}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <td key={index}>
+                    <img
+                      src={Object.values(mapPoolData)[index].map.imgUrlMap}
+                      alt={`img-${
+                        Object.values(mapPoolData)[index].map.nameMap
+                      }`}
+                      height={70}
+                      width={70}
+                      className="object-fit-cover"
+                    />
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <td key={index}>
+                    <span>
+                      {Object.values(mapPoolData)[index].resultMap.nameTeam}
+                    </span>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <td key={index}>
+                    <img
+                      src={
+                        Object.values(mapPoolData)[index].resultMap.imgUrlTeam
+                      }
+                      alt={`winner-${
+                        Object.values(mapPoolData)[index].resultMap.nameTeam
+                      }`}
+                      height={70}
+                      width={70}
+                      className="object-fit-contain"
+                    />
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <th scope="row">Map finished ?</th>
+                {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
+                  <td>
+                    <Form.Check
+                      ref={refScore}
+                      aria-label={`isMap${
+                        Object.values(mapPoolData)[indexMapPool].isFinishedMap
+                      }finished`}
+                      checked={
+                        Object.values(mapPoolData)[indexMapPool].isFinishedMap
+                      }
+                      onClick={() => {
+                        handleIsFinishedChange(indexMapPool);
+                        //handleScoreMatchChange();
+                        console.log(refScore.current);
+                        setMapPoolData(Object.values(mapPoolData));
+                        saveMapPool(Object.values(mapPoolData));
+                        //saveScoreMatch(actualScore);
+                      }}
+                    />
+                  </td>
+                ))}
+              </tr>
+            </tbody>
           </Table>
         </Col>
         <Col />
@@ -504,70 +527,75 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
         <Col />
         <Col xs="11">
           <Table striped bordered className="mt-5">
-            <tr>
-              <th>TEAM</th>
-              {Object.values(mapPoolData).map((item, index) => (
-                <td key={index}>
-                  <img
-                    src={
-                      Object.values(mapPoolData)[index].gamemodeMap
-                        .imgUrlGamemode
-                    }
-                    alt={`img-${
-                      Object.values(mapPoolData)[index].gamemodeMap.nameGamemode
-                    }`}
-                    height={60}
-                    width={60}
-                    className="object-fit-contain"
-                  />
-                </td>
-              ))}
-              <th>TOTAL</th>
-            </tr>
-            <tr>
-              <th scope="row">{currentTeam1.currentTeam1.name}</th>
-              {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
-                <td>
-                  <Form.Control
-                    ref={refScore}
-                    type="number"
-                    value={
-                      Object.values(mapPoolData)[indexMapPool].scoreTeam1Map
-                    }
-                    min={0}
-                    onChange={(event) => {
-                      handleScoreTeam1MapChange(indexMapPool, event);
+            <thead>
+              <tr>
+                <th>TEAM</th>
+                {Object.values(mapPoolData).map((item, index) => (
+                  <td key={index}>
+                    <img
+                      src={
+                        Object.values(mapPoolData)[index].gamemodeMap
+                          .imgUrlGamemode
+                      }
+                      alt={`img-${
+                        Object.values(mapPoolData)[index].gamemodeMap
+                          .nameGamemode
+                      }`}
+                      height={60}
+                      width={60}
+                      className="object-fit-contain"
+                    />
+                  </td>
+                ))}
+                <th>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">{currentTeam1.currentTeam1.name}</th>
+                {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
+                  <td>
+                    <Form.Control
+                      ref={refScore}
+                      type="number"
+                      value={
+                        Object.values(mapPoolData)[indexMapPool].scoreTeam1Map
+                      }
+                      min={0}
+                      onChange={(event) => {
+                        handleScoreTeam1MapChange(indexMapPool, event);
 
-                      setMapPoolData(Object.values(mapPoolData));
-                      saveMapPool(Object.values(mapPoolData));
-                    }}
-                  />
-                </td>
-              ))}
-              <th>{refScore.current.scoreTeam1Match}</th>
-            </tr>
-            <tr>
-              <th scope="row">{currentTeam1.currentTeam2.name}</th>
-              {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
-                <td>
-                  <Form.Control
-                    ref={refScore}
-                    type="number"
-                    value={
-                      Object.values(mapPoolData)[indexMapPool].scoreTeam2Map
-                    }
-                    min={0}
-                    onChange={(event) => {
-                      handleScoreTeam2MapChange(indexMapPool, event);
+                        setMapPoolData(Object.values(mapPoolData));
+                        saveMapPool(Object.values(mapPoolData));
+                      }}
+                    />
+                  </td>
+                ))}
+                <th>{refScore.current.scoreTeam1Match}</th>
+              </tr>
+              <tr>
+                <th scope="row">{currentTeam1.currentTeam2.name}</th>
+                {Object.values(mapPoolData).map((itemMapPool, indexMapPool) => (
+                  <td>
+                    <Form.Control
+                      ref={refScore}
+                      type="number"
+                      value={
+                        Object.values(mapPoolData)[indexMapPool].scoreTeam2Map
+                      }
+                      min={0}
+                      onChange={(event) => {
+                        handleScoreTeam2MapChange(indexMapPool, event);
 
-                      setMapPoolData(Object.values(mapPoolData));
-                      saveMapPool(Object.values(mapPoolData));
-                    }}
-                  />
-                </td>
-              ))}
-              <th>{refScore.current.scoreTeam2Match}</th>
-            </tr>
+                        setMapPoolData(Object.values(mapPoolData));
+                        saveMapPool(Object.values(mapPoolData));
+                      }}
+                    />
+                  </td>
+                ))}
+                <th>{refScore.current.scoreTeam2Match}</th>
+              </tr>
+            </tbody>
           </Table>
         </Col>
         <Col />
