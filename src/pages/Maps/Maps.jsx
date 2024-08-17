@@ -78,7 +78,15 @@ export function Maps() {
     const dbRef = ref(db, '0/maps/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setMapArray(Object.values(data));
+      let sortedMapArray = Object.values(data);
+      sortedMapArray.sort(function (a, b) {
+        return a.nameMap.toLowerCase() > b.nameMap.toLowerCase()
+          ? 1
+          : b.nameMap.toLowerCase() > a.nameMap.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setMapArray(sortedMapArray);
     });
   }
 
@@ -93,8 +101,15 @@ export function Maps() {
           idMap: objectId,
         };
       });
-
-      setMapArray(tmpArray);
+      let sortedMapArray = tmpArray;
+      sortedMapArray.sort(function (a, b) {
+        return a.nameMap.toLowerCase() > b.nameMap.toLowerCase()
+          ? 1
+          : b.nameMap.toLowerCase() > a.nameMap.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setMapArray(sortedMapArray);
     });
   }
 

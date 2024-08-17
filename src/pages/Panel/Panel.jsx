@@ -354,7 +354,17 @@ export function Panel() {
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setBroadcastTalentArray(Object.values(data));
+      let sortedBroadcastTalentArray = Object.values(data);
+      sortedBroadcastTalentArray.sort(function (a, b) {
+        return a.nameBroadcastTalent.toLowerCase() >
+          b.nameBroadcastTalent.toLowerCase()
+          ? 1
+          : b.nameBroadcastTalent.toLowerCase() >
+            a.nameBroadcastTalent.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setBroadcastTalentArray(sortedBroadcastTalentArray);
     });
 
     onValue(dbFormatRef, (snapshot) => {
@@ -388,7 +398,15 @@ export function Panel() {
 
     onValue(dbTeamsRef, (snapshot) => {
       const data = snapshot.val();
-      setTeamArray(Object.values(data));
+      let sortedTeamArray = Object.values(data);
+      sortedTeamArray.sort(function (a, b) {
+        return a.name.toLowerCase() > b.name.toLowerCase()
+          ? 1
+          : b.name.toLowerCase() > a.name.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setTeamArray(sortedTeamArray);
     });
   }, []);
 

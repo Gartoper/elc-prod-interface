@@ -87,7 +87,15 @@ export function Teams() {
     const dbRef = ref(db, '0/teams/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setTeamArray(Object.values(data));
+      let sortedTeamArray = Object.values(data);
+      sortedTeamArray.sort(function (a, b) {
+        return a.name.toLowerCase() > b.name.toLowerCase()
+          ? 1
+          : b.name.toLowerCase() > a.name.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setTeamArray(sortedTeamArray);
     });
   }
 
@@ -102,8 +110,15 @@ export function Teams() {
           idTeam: objectId,
         };
       });
-
-      setTeamArray(tmpArray);
+      let sortedTeamArray = tmpArray;
+      sortedTeamArray.sort(function (a, b) {
+        return a.name.toLowerCase() > b.name.toLowerCase()
+          ? 1
+          : b.name.toLowerCase() > a.name.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setTeamArray(sortedTeamArray);
     });
   }
 

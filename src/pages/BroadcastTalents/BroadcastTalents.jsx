@@ -60,7 +60,17 @@ export function BroadcastTalents() {
     const dbRef = ref(db, '0/broadcastTalents/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setBroadcastTalentArray(Object.values(data));
+      let sortedBroadcastTalentArray = Object.values(data);
+      sortedBroadcastTalentArray.sort(function (a, b) {
+        return a.nameBroadcastTalent.toLowerCase() >
+          b.nameBroadcastTalent.toLowerCase()
+          ? 1
+          : b.nameBroadcastTalent.toLowerCase() >
+            a.nameBroadcastTalent.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setBroadcastTalentArray(sortedBroadcastTalentArray);
     });
   }
 
@@ -75,8 +85,17 @@ export function BroadcastTalents() {
           idBroadcastTalent: objectId,
         };
       });
-
-      setBroadcastTalentArray(tmpArray);
+      let sortedBroadcastTalentArray = tmpArray;
+      sortedBroadcastTalentArray.sort(function (a, b) {
+        return a.nameBroadcastTalent.toLowerCase() >
+          b.nameBroadcastTalent.toLowerCase()
+          ? 1
+          : b.nameBroadcastTalent.toLowerCase() >
+            a.nameBroadcastTalent.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setBroadcastTalentArray(sortedBroadcastTalentArray);
     });
   }
 

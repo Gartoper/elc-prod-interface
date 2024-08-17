@@ -31,7 +31,15 @@ export function Roster({ rosterData, setRosterData }) {
 
     onValue(dbHerosRef, (snapshot) => {
       const data = snapshot.val();
-      setHeroArray(Object.values(data));
+      let sortedHeroArray = Object.values(data);
+      sortedHeroArray.sort(function (a, b) {
+        return a.nameHero.toLowerCase() > b.nameHero.toLowerCase()
+          ? 1
+          : b.nameHero.toLowerCase() > a.nameHero.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setHeroArray(sortedHeroArray);
     });
   }, []);
 

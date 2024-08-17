@@ -121,12 +121,28 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
 
     onValue(dbGamemodesRef, (snapshot) => {
       const data = snapshot.val();
-      setGamemodeArray(Object.values(data));
+      let sortedGammemodeArray = Object.values(data);
+      sortedGammemodeArray.sort(function (a, b) {
+        return a.nameGamemode.toLowerCase() > b.nameGamemode.toLowerCase()
+          ? 1
+          : b.nameGamemode.toLowerCase() > a.nameGamemode.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setGamemodeArray(sortedGammemodeArray);
     });
 
     onValue(dbMapsRef, (snapshot) => {
       const data = snapshot.val();
-      setMapArray(Object.values(data));
+      let sortedMapArray = Object.values(data);
+      sortedMapArray.sort(function (a, b) {
+        return a.nameMap.toLowerCase() > b.nameMap.toLowerCase()
+          ? 1
+          : b.nameMap.toLowerCase() > a.nameMap.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setMapArray(sortedMapArray);
     });
 
     fetchMapPoolData(dbMapPoolRef);

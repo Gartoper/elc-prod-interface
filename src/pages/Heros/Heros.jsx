@@ -77,7 +77,15 @@ export function Heros() {
     const dbRef = ref(db, '0/heros/0');
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      setHeroArray(Object.values(data));
+      let sortedHeroArray = Object.values(data);
+      sortedHeroArray.sort(function (a, b) {
+        return a.nameHero.toLowerCase() > b.nameHero.toLowerCase()
+          ? 1
+          : b.nameHero.toLowerCase() > a.nameHero.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setHeroArray(sortedHeroArray);
     });
   }
 
@@ -92,8 +100,15 @@ export function Heros() {
           idHero: objectId,
         };
       });
-
-      setHeroArray(tmpArray);
+      let sortedHeroArray = tmpArray;
+      sortedHeroArray.sort(function (a, b) {
+        return a.nameHero.toLowerCase() > b.nameHero.toLowerCase()
+          ? 1
+          : b.nameHero.toLowerCase() > a.nameHero.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setHeroArray(sortedHeroArray);
     });
   }
 
