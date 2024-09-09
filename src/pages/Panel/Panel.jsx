@@ -41,6 +41,7 @@ export function Panel() {
   const [teamArray, setTeamArray] = useState([]);
   const [currentTeam1, setCurrentTeam1] = useState({});
   const [currentTeam2, setCurrentTeam2] = useState({});
+  const [currentTournamentTitle, setCurrentTournamentTitle] = useState('');
   const [currentMapPoolData, setCurrentMapPoolData] = useState([]);
 
   const CustomTeamToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -351,6 +352,7 @@ export function Panel() {
     const dbRef = ref(db, '0/broadcastTalents/0');
     const dbFormatRef = ref(db, '0/formats/0');
     const dbScoreMatchRef = ref(db, '0/panel/0/mappool/scoreMatch');
+    const dbTournamentTitleRef = ref(db, '0/panel/0/tournamentTitle');
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
@@ -380,6 +382,11 @@ export function Panel() {
       };
     });
 
+    onValue(dbTournamentTitleRef, (snapshot) => {
+      const data = snapshot.val();
+      setCurrentTournamentTitle(Object.values(data)[0]);
+    });
+
     fetchHost();
     fetchCaster1();
     fetchCaster2();
@@ -389,6 +396,7 @@ export function Panel() {
     fetchFormat();
     fetchTeam1();
     fetchTeam2();
+    fetchTournamentTitle();
     fetchCurrentMapPoolData();
   }, []);
 
@@ -412,6 +420,7 @@ export function Panel() {
 
   const refScore = useRef(null);
   const refMapPool = useRef();
+  const refTournamentTitle = useRef(currentTournamentTitle);
 
   async function fetchHost() {
     const db = getDatabase(app);
@@ -500,6 +509,17 @@ export function Panel() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       setCurrentTeam2(data);
+    });
+  }
+
+  async function fetchTournamentTitle() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/panel/0/tournamentTitle');
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(Object.values(data)[0]);
+      setCurrentTournamentTitle(Object.values(data)[0]);
     });
   }
 
@@ -983,6 +1003,24 @@ export function Panel() {
       });
   }
 
+  function saveTournamentTitle() {
+    const db = getDatabase(app);
+    const newDocRef = ref(db, '0/panel/0/tournamentTitle');
+
+    let tournamentTitleValue = refTournamentTitle.current.value;
+
+    set(newDocRef, {
+      name: tournamentTitleValue,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors de la modification du titre tournoi dans le panel: ',
+          error.message
+        );
+      });
+  }
+
   return (
     <>
       <Row className={s.cast_setup_banner}>
@@ -1311,6 +1349,20 @@ export function Panel() {
                   handleSwitchTeams();
                 }}
               ></img>
+            </Row>
+            <Row className="justify-content-center">
+              <Col xs="10">
+                <Form.Control
+                  ref={refTournamentTitle}
+                  type="text"
+                  defaultValue={currentTournamentTitle}
+                  placeholder="Titre tournoi"
+                  onChange={(e) => {
+                    setCurrentTournamentTitle(e.target.value);
+                    saveTournamentTitle();
+                  }}
+                />
+              </Col>
             </Row>
           </Col>
           <Col>
