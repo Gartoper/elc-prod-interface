@@ -284,77 +284,81 @@ export function Teams() {
                 </Row>
               </td>
               <td>
-                <Button
-                  className={s.edit_button}
-                  variant="warning"
-                  onClick={() => {
-                    handleShowUpdateModal();
-                    setCurrentTeam(item);
-                    setCurrentTeamID(item.idTeam);
-                    setInputValue1(item.name);
-                    setInputValue2(item.shortName);
-                    setInputValue3(item.imgUrl);
-                    setInputValue4(item.color);
-                    setInputValue5(item.score);
-                    setInputValue6(item.palmares);
-                    setInputValue7(item.commentary);
-                    setRosterData(item.players);
-                  }}
-                >
-                  <svg
-                    width="24px"
-                    height="24px"
-                    viewBox="0 0 24 24"
-                    className={s.edit_icon}
-                  >
-                    <path
-                      id="Shape"
-                      d="M.75,17.5A.751.751,0,0,1,0,16.75V12.569a.755.755,0,0,1,.22-.53L11.461.8a2.72,2.72,0,0,1,3.848,0L16.7,2.191a2.72,2.72,0,0,1,0,3.848L5.462,17.28a.747.747,0,0,1-.531.22ZM1.5,12.879V16h3.12l7.91-7.91L9.41,4.97ZM13.591,7.03l2.051-2.051a1.223,1.223,0,0,0,0-1.727L14.249,1.858a1.222,1.222,0,0,0-1.727,0L10.47,3.91Z"
-                      transform="translate(3.25 3.25)"
-                      fill="#141124"
-                    />
-                  </svg>
-                  <span>Update</span>
-                </Button>
-                <Button
-                  className={s.delete_button}
-                  variant="danger"
-                  onClick={() => {
-                    deleteData(item.idTeam);
-                  }}
-                >
-                  <svg
-                    width="24px"
-                    height="24px"
-                    viewBox="0 -0.5 21 21"
-                    className={s.delete_icon}
-                  >
-                    <g
-                      id="Page-1"
-                      stroke="none"
-                      strokeWidth="1"
-                      fill="none"
-                      fillRule="evenodd"
+                {item.idTeam !== process.env.REACT_APP_ID_TEAM_TBD && (
+                  <>
+                    <Button
+                      className={s.edit_button}
+                      variant="warning"
+                      onClick={() => {
+                        handleShowUpdateModal();
+                        setCurrentTeam(item);
+                        setCurrentTeamID(item.idTeam);
+                        setInputValue1(item.name);
+                        setInputValue2(item.shortName);
+                        setInputValue3(item.imgUrl);
+                        setInputValue4(item.color);
+                        setInputValue5(item.score);
+                        setInputValue6(item.palmares);
+                        setInputValue7(item.commentary);
+                        setRosterData(item.players);
+                      }}
                     >
-                      <g
-                        id="Dribbble-Light-Preview"
-                        transform="translate(-179.000000, -360.000000)"
-                        fill="#ffffff"
+                      <svg
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        className={s.edit_icon}
+                      >
+                        <path
+                          id="Shape"
+                          d="M.75,17.5A.751.751,0,0,1,0,16.75V12.569a.755.755,0,0,1,.22-.53L11.461.8a2.72,2.72,0,0,1,3.848,0L16.7,2.191a2.72,2.72,0,0,1,0,3.848L5.462,17.28a.747.747,0,0,1-.531.22ZM1.5,12.879V16h3.12l7.91-7.91L9.41,4.97ZM13.591,7.03l2.051-2.051a1.223,1.223,0,0,0,0-1.727L14.249,1.858a1.222,1.222,0,0,0-1.727,0L10.47,3.91Z"
+                          transform="translate(3.25 3.25)"
+                          fill="#141124"
+                        />
+                      </svg>
+                      <span>Update</span>
+                    </Button>
+                    <Button
+                      className={s.delete_button}
+                      variant="danger"
+                      onClick={() => {
+                        deleteData(item.idTeam);
+                      }}
+                    >
+                      <svg
+                        width="24px"
+                        height="24px"
+                        viewBox="0 -0.5 21 21"
+                        className={s.delete_icon}
                       >
                         <g
-                          id="icons"
-                          transform="translate(56.000000, 160.000000)"
+                          id="Page-1"
+                          stroke="none"
+                          strokeWidth="1"
+                          fill="none"
+                          fillRule="evenodd"
                         >
-                          <path
-                            d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
-                            id="delete-[#1487]"
-                          ></path>
+                          <g
+                            id="Dribbble-Light-Preview"
+                            transform="translate(-179.000000, -360.000000)"
+                            fill="#ffffff"
+                          >
+                            <g
+                              id="icons"
+                              transform="translate(56.000000, 160.000000)"
+                            >
+                              <path
+                                d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
+                                id="delete-[#1487]"
+                              ></path>
+                            </g>
+                          </g>
                         </g>
-                      </g>
-                    </g>
-                  </svg>
-                  <span>Delete</span>
-                </Button>
+                      </svg>
+                      <span>Delete</span>
+                    </Button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
