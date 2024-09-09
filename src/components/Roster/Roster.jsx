@@ -46,6 +46,21 @@ export function Roster({ rosterData, setRosterData }) {
   function handleFormChange(event, index) {
     let data = [...rosterData];
     data[index][event.target.name] = event.target.value;
+
+    if (
+      event.target.name === 'heroPlayer' &&
+      (data[index]['urlPhotoPlayer'] === '' ||
+        (data[index]['urlPhotoPlayer'].startsWith(
+          process.env.REACT_APP_DATABASE_OW_HEROS_URL
+        ) &&
+          data[index]['urlPhotoPlayer'] !==
+            process.env.REACT_APP_DATABASE_OW_HEROS_URL + event.target.value))
+    ) {
+      let selectedHero = heroArray.find(
+        (element) => element.nameHero === event.target.value
+      );
+      data[index]['urlPhotoPlayer'] = selectedHero.imgUrlHero;
+    }
     setRosterData(data);
   }
 
