@@ -215,6 +215,94 @@ export function Sidebar() {
         </a>
       </li>
       <li>
+        <a
+          href="https://vdo.ninja/?director=EsportLiveCentral&password=Production07092024"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg
+            width="18px"
+            height="18px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="me-2 mb-1"
+          >
+            <g id="System / Data">
+              <path
+                d="M18 12V17C18 18.6569 15.3137 20 12 20C8.68629 20 6 18.6569 6 17V12M18 12V7M18 12C18 13.6569 15.3137 15 12 15C8.68629 15 6 13.6569 6 12M18 7C18 5.34315 15.3137 4 12 4C8.68629 4 6 5.34315 6 7M18 7C18 8.65685 15.3137 10 12 10C8.68629 10 6 8.65685 6 7M6 12V7"
+                stroke="#ffffff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </g>
+          </svg>
+          VDO Ninja{' '}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12px"
+            height="12px"
+            fill="currentColor"
+            className="bi bi-box-arrow-up-right ms-2 mb-2"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
+            />
+            <path
+              fillRule="evenodd"
+              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
+            />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://panel.dragonsesport.fr/assets/Overwatch/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg
+            width="18px"
+            height="18px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="me-2 mb-1"
+          >
+            <g id="System / Data">
+              <path
+                d="M18 12V17C18 18.6569 15.3137 20 12 20C8.68629 20 6 18.6569 6 17V12M18 12V7M18 12C18 13.6569 15.3137 15 12 15C8.68629 15 6 13.6569 6 12M18 7C18 5.34315 15.3137 4 12 4C8.68629 4 6 5.34315 6 7M18 7C18 8.65685 15.3137 10 12 10C8.68629 10 6 8.65685 6 7M6 12V7"
+                stroke="#ffffff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </g>
+          </svg>
+          Assets{' '}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12px"
+            height="12px"
+            fill="currentColor"
+            className="bi bi-box-arrow-up-right ms-2 mb-2"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
+            />
+            <path
+              fillRule="evenodd"
+              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
+            />
+          </svg>
+        </a>
+      </li>
+      <li>
         {/*<NavLink
           to="/logout"
           className={s.logout_btn}
