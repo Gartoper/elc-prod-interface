@@ -1,6 +1,7 @@
 import s from './style.module.css';
 import doubleArrowImg from '../../assets/images/double-arrow.png';
 import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { MapPool } from '../../components/MapPool/MapPool';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -1003,6 +1004,17 @@ export function Panel() {
       });
   }
 
+  function updatePanel() {
+    fetch(process.env.REACT_APP_UPDATE_PANEL_GSHEET_LINK)
+      .then((response) => response.text())
+      .then((data) => {
+        toast.success('Output GSheet updated');
+      })
+      .catch((error) => {
+        toast.error('Error when updating Output GSheet:', error);
+      });
+  }
+
   function saveTournamentTitle() {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/tournamentTitle');
@@ -1024,10 +1036,7 @@ export function Panel() {
   return (
     <>
       <Row className={s.cast_setup_banner}>
-        <Col xs={5}>
-          <h2>Cast setup</h2>
-        </Col>
-        <Col xs={7}>
+        <Col>
           <Button
             variant="danger"
             className="px-4 fs-5"
@@ -1036,6 +1045,15 @@ export function Panel() {
             }}
           >
             RESET PANEL
+          </Button>
+          <Button
+            variant="success"
+            className="px-4 fs-5 ms-3"
+            onClick={() => {
+              updatePanel();
+            }}
+          >
+            UPDATE
           </Button>
         </Col>
       </Row>
