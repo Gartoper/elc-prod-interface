@@ -44,6 +44,7 @@ export function Panel() {
   const [currentTeam2, setCurrentTeam2] = useState({});
   const [currentTournamentTitle, setCurrentTournamentTitle] = useState('');
   const [currentMapPoolData, setCurrentMapPoolData] = useState([]);
+  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState('');
 
   const CustomTeamToggle = React.forwardRef(({ children, onClick }, ref) => (
     <Dropdown.Toggle
@@ -385,7 +386,7 @@ export function Panel() {
 
     onValue(dbTournamentTitleRef, (snapshot) => {
       const data = snapshot.val();
-      setCurrentTournamentTitle(Object.values(data)[0]);
+      setCurrentTournamentTitle(data === null ? '' : Object.values(data)[0]);
     });
 
     fetchHost();
@@ -399,6 +400,7 @@ export function Panel() {
     fetchTeam2();
     fetchTournamentTitle();
     fetchCurrentMapPoolData();
+    fetchCurrentlyPlayedMap();
   }, []);
 
   useEffect(() => {
@@ -519,8 +521,7 @@ export function Panel() {
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      console.log(Object.values(data)[0]);
-      setCurrentTournamentTitle(Object.values(data)[0]);
+      setCurrentTournamentTitle(data === null ? '' : Object.values(data)[0]);
     });
   }
 
@@ -531,6 +532,16 @@ export function Panel() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       setCurrentMapPoolData(Object.values(data)[0]);
+    });
+  }
+
+  function fetchCurrentlyPlayedMap() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/panel/0/currentlyPlayedMap');
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data !== null) setCurrentlyPlayedMap(Object.values(data)[0]);
     });
   }
 
@@ -821,6 +832,12 @@ export function Panel() {
   function saveSwitchMapPoolData(mapPoolData) {
     const db = getDatabase(app);
     const newDocRef = ref(db, '0/panel/0/mappool');
+    const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
+
+    onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
+      const data = snapshot.val();
+      setCurrentlyPlayedMap(Object.values(data)[0]);
+    });
 
     let mapsDataValue = mapPoolData === '' ? '' : mapPoolData;
     let scoreMatchValue = refScore.current === '' ? '' : refScore.current;
@@ -840,6 +857,17 @@ export function Panel() {
       .catch((error) => {
         console.error(
           'Erreur lors du switch de map pool dans le panel: ',
+          error.message
+        );
+      });
+
+    set(dbCurrentlyPlayedMapRef, {
+      name: currentlyPlayedMap,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors du switch de map pool dans le panel (map actuellement jouée dans le panel): ',
           error.message
         );
       });
@@ -893,6 +921,7 @@ export function Panel() {
     const mappoolRef = ref(db, '0/panel/0/mappool');
     const team1Ref = ref(db, '0/panel/0/team1');
     const team2Ref = ref(db, '0/panel/0/team2');
+    const currentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
 
     let broadcastTalentEmptyValue = {
       pseudo: '',
@@ -964,6 +993,17 @@ export function Panel() {
       .catch((error) => {
         console.error(
           'Erreur lors du reset du map pool dans le panel: ',
+          error.message
+        );
+      });
+
+    set(currentlyPlayedMapRef, {
+      name: 'TBD',
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors du reset du map pool dans le panel (map actuellement jouée dans le panel): ',
           error.message
         );
       });

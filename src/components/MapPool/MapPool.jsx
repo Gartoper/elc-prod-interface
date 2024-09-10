@@ -25,6 +25,7 @@ import {
 export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const [numberMaps, setNumberMaps] = useState(1);
   const [textPrevCurrentNext, setTextPrevCurrentNext] = useState('');
+  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState('');
   const [gamemodeArray, setGamemodeArray] = useState([]);
   const [mapArray, setMapArray] = useState([]);
 
@@ -113,11 +114,16 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const [actualScore, setActualScore] = useState(DEFAULT_SCORE);
 
   useEffect(() => {
+    if (currentlyPlayedMap !== '') updateCurrentlyPlayedMap(currentlyPlayedMap);
+  }, [currentlyPlayedMap]);
+
+  useEffect(() => {
     const db = getDatabase(app);
     const dbGamemodesRef = ref(db, '0/gamemodes/0');
     const dbMapsRef = ref(db, '0/maps/0');
     const dbMapPoolRef = ref(db, '0/panel/0/mappool');
     const dbScoreMatchRef = ref(db, '0/panel/0/mappool/scoreMatch');
+    const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
 
     onValue(dbGamemodesRef, (snapshot) => {
       const data = snapshot.val();
@@ -146,6 +152,7 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     });
 
     fetchMapPoolData(dbMapPoolRef);
+    fetchCurrentlyPlayedMap(dbCurrentlyPlayedMapRef);
 
     onValue(dbScoreMatchRef, (snapshot) => {
       const data = snapshot.val();
@@ -161,6 +168,13 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     onValue(dbMapPoolRef, async (snapshot) => {
       const data = snapshot.val();
       setMapPoolData(Object.values(data)[0]);
+    });
+  }
+
+  function fetchCurrentlyPlayedMap(dbCurrentlyPlayedMapRef) {
+    onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
+      const data = snapshot.val();
+      setCurrentlyPlayedMap(Object.values(data)[0]);
     });
   }
 
@@ -205,6 +219,22 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
       });
   }
 
+  function updateCurrentlyPlayedMap(mapName) {
+    const db = getDatabase(app);
+    const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
+
+    set(dbCurrentlyPlayedMapRef, {
+      name: mapName,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          'Erreur lors de la modification de la map actuellement jouée dans le panel: ',
+          error.message
+        );
+      });
+  }
+
   function handleGamemodeChange(index, itemGamemode) {
     let data = [...mapPoolData];
     data[index].gamemodeMap =
@@ -214,6 +244,8 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   function handleMapChange(index, itemMap) {
     let data = [...mapPoolData];
     data[index].map = itemMap === '' ? DEFAULT_MAP : itemMap;
+
+    handleCurrentlyPlayedMapChange(data);
   }
 
   function handleIsFinishedChange(index) {
@@ -221,6 +253,21 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     data[index].isFinishedMap = !data[index].isFinishedMap;
 
     handleMapResultChange(index, data);
+    handleCurrentlyPlayedMapChange(data);
+  }
+
+  function handleCurrentlyPlayedMapChange(mapPoolData) {
+    let lastPlayedMap = mapPoolData.findLastIndex(isLastPlayedMap);
+
+    if (lastPlayedMap + 1 === mapPoolData.length) {
+      setCurrentlyPlayedMap(mapPoolData[mapPoolData.length - 1].map.nameMap);
+    } else {
+      setCurrentlyPlayedMap(mapPoolData[lastPlayedMap + 1].map.nameMap);
+    }
+  }
+
+  function isLastPlayedMap(map) {
+    return map.isFinishedMap === true;
   }
 
   function handleScoreTeam1MapChange(index, event) {
