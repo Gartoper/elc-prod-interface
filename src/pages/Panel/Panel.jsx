@@ -386,9 +386,16 @@ export function Panel() {
 
     onValue(dbScoreMatchRef, (snapshot) => {
       const data = snapshot.val();
+
+      let displayedData = '';
+      data.scoreTeam1Match === 0 && data.scoreTeam2Match === 0
+        ? (displayedData = 'VS')
+        : (displayedData = data.scoreTeam1Match + '-' + data.scoreTeam2Match);
+
       refScore.current = {
         scoreTeam1Match: data.scoreTeam1Match,
         scoreTeam2Match: data.scoreTeam2Match,
+        displayedScoreMatch: displayedData,
       };
     });
 
@@ -914,9 +921,16 @@ export function Panel() {
 
     var tmpScore = refScore.current;
 
+    let displayedData = '';
+    tmpScore.scoreTeam1Match === 0 && tmpScore.scoreTeam2Match === 0
+      ? (displayedData = 'VS')
+      : (displayedData =
+          tmpScore.scoreTeam2Match + '-' + tmpScore.scoreTeam1Match);
+
     refScore.current = {
       scoreTeam1Match: tmpScore.scoreTeam2Match,
       scoreTeam2Match: tmpScore.scoreTeam1Match,
+      displayedScoreMatch: displayedData,
     };
     handleScoreMatchSwitch();
 
@@ -971,6 +985,7 @@ export function Panel() {
       mappoolEmptyValue.scoreMatch = {
         scoreTeam1Match: 0,
         scoreTeam2Match: 0,
+        displayedScoreMatch: 'VS',
       };
 
       mappoolEmptyValue.totalMapPool.forEach((mapName, index) => {

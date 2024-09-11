@@ -49,6 +49,7 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const DEFAULT_SCORE = {
     scoreTeam1Match: 0,
     scoreTeam2Match: 0,
+    displayedScoreMatch: 'VS',
   };
 
   const defaultMapPoolData = [
@@ -165,9 +166,16 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
 
     onValue(dbScoreMatchRef, (snapshot) => {
       const data = snapshot.val();
+
+      let displayedData = '';
+      data.scoreTeam1Match === 0 && data.scoreTeam2Match === 0
+        ? (displayedData = 'VS')
+        : (displayedData = data.scoreTeam1Match + '-' + data.scoreTeam2Match);
+
       refScore.current = {
         scoreTeam1Match: data.scoreTeam1Match,
         scoreTeam2Match: data.scoreTeam2Match,
+        displayedScoreMatch: displayedData,
       };
     });
   }, []);
@@ -189,6 +197,7 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const refScore = useRef({
     scoreTeam1Match: actualScore.scoreTeam1Match,
     scoreTeam2Match: actualScore.scoreTeam2Match,
+    displayedScoreMatch: actualScore.displayedScoreMatch,
   });
 
   async function saveMapPool(mapPoolData) {
@@ -353,9 +362,17 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
         actualScore.scoreTeam2Match++;
       }
     });
+
+    let displayedData = '';
+    actualScore.scoreTeam1Match === 0 && actualScore.scoreTeam2Match === 0
+      ? (displayedData = 'VS')
+      : (displayedData =
+          actualScore.scoreTeam1Match + '-' + actualScore.scoreTeam2Match);
+
     refScore.current = {
       scoreTeam1Match: actualScore.scoreTeam1Match,
       scoreTeam2Match: actualScore.scoreTeam2Match,
+      displayedScoreMatch: displayedData,
     };
   }
 
