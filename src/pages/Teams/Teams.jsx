@@ -1,7 +1,8 @@
 import s from './style.module.css';
 import { toast } from 'react-toastify';
-import { useState, useEffect, React } from 'react';
+import { useState, useEffect, useRef, React } from 'react';
 import { Roster } from '../../components/Roster/Roster';
+import { SearchBar } from '../../components/SearchBar/SearchBar';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Col from 'react-bootstrap/Col';
@@ -33,6 +34,7 @@ export function Teams() {
   const [currentTeam, setCurrentTeam] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const searchBarRef = useRef();
 
   const defaultRosterData = [
     { pseudoPlayer: '', rolePlayer: '', heroPlayer: '', urlPhotoPlayer: '' },
@@ -180,6 +182,7 @@ export function Teams() {
           });
       }
     }
+    handleClearSearchInput();
   }
 
   async function deleteData(idTeam) {
@@ -195,6 +198,15 @@ export function Teams() {
           error.message
         );
       });
+    handleClearSearchInput();
+  }
+
+  function getSearchedTeams(teams) {
+    setTeamArray(teams);
+  }
+
+  function handleClearSearchInput() {
+    searchBarRef.current.clearSearchInput();
   }
 
   return (
@@ -207,7 +219,7 @@ export function Teams() {
         <Col />
       </Row>
       <Row className="mb-4">
-        <Col xs={2}>
+        <Col xs={4}>
           <Button
             variant="primary"
             onClick={() => {
@@ -227,7 +239,9 @@ export function Teams() {
             Nouvelle équipe
           </Button>
         </Col>
-        <Col xs={10} />
+        <Col xs={3}>
+          <SearchBar getSearchedTeams={getSearchedTeams} ref={searchBarRef} />
+        </Col>
       </Row>
       <Table className="mt-4" striped bordered hover responsive>
         <thead>
