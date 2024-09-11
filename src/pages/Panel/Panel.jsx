@@ -44,7 +44,15 @@ export function Panel() {
   const [currentTeam2, setCurrentTeam2] = useState({});
   const [currentTournamentTitle, setCurrentTournamentTitle] = useState('');
   const [currentMapPoolData, setCurrentMapPoolData] = useState([]);
-  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState('');
+
+  const DEFAULT_CURRENTLY_PLAYED_MAP = {
+    name: 'TBD',
+    videoURL: '',
+  };
+
+  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState(
+    DEFAULT_CURRENTLY_PLAYED_MAP
+  );
 
   const CustomTeamToggle = React.forwardRef(({ children, onClick }, ref) => (
     <Dropdown.Toggle
@@ -541,7 +549,7 @@ export function Panel() {
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-      if (data !== null) setCurrentlyPlayedMap(Object.values(data)[0]);
+      if (data !== null) setCurrentlyPlayedMap(data);
     });
   }
 
@@ -836,7 +844,7 @@ export function Panel() {
 
     onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
       const data = snapshot.val();
-      setCurrentlyPlayedMap(Object.values(data)[0]);
+      setCurrentlyPlayedMap(data);
     });
 
     let mapsDataValue = mapPoolData === '' ? '' : mapPoolData;
@@ -862,7 +870,8 @@ export function Panel() {
       });
 
     set(dbCurrentlyPlayedMapRef, {
-      name: currentlyPlayedMap,
+      name: currentlyPlayedMap.name,
+      videoURL: currentlyPlayedMap.videoURL,
     })
       .then(() => {})
       .catch((error) => {
@@ -947,6 +956,7 @@ export function Panel() {
             imgUrlMap:
               'https://panel.dragonsesport.fr/assets/Overwatch/Map/TBD.png',
             nameMap: 'TBD',
+            videoUrlMap: '',
           },
           resultMap: {
             imgUrlTeam:
@@ -999,6 +1009,7 @@ export function Panel() {
 
     set(currentlyPlayedMapRef, {
       name: 'TBD',
+      videoURL: '',
     })
       .then(() => {})
       .catch((error) => {
@@ -1323,10 +1334,8 @@ export function Panel() {
                             <Dropdown.Item
                               key={index}
                               onClick={() => {
-                                console.log(item);
                                 setCurrentTeam1(item);
                                 saveTeam1(item);
-                                console.log(item.name);
                               }}
                             >
                               {item.name}
@@ -1455,10 +1464,8 @@ export function Panel() {
                             <Dropdown.Item
                               key={index}
                               onClick={() => {
-                                console.log(item);
                                 setCurrentTeam2(item);
                                 saveTeam2(item);
-                                console.log(item.name);
                               }}
                             >
                               {item.name}

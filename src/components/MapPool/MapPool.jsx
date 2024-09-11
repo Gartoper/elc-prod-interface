@@ -25,7 +25,6 @@ import {
 export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const [numberMaps, setNumberMaps] = useState(1);
   const [textPrevCurrentNext, setTextPrevCurrentNext] = useState('');
-  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState('');
   const [gamemodeArray, setGamemodeArray] = useState([]);
   const [mapArray, setMapArray] = useState([]);
 
@@ -38,6 +37,7 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   const DEFAULT_MAP = {
     nameMap: 'TBD',
     imgUrlMap: 'https://panel.dragonsesport.fr/assets/Overwatch/Map/TBD.png',
+    videoUrlMap: '',
   };
 
   const DEFAULT_TEAM = {
@@ -110,11 +110,20 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     },
   ];
 
+  const DEFAULT_CURRENTLY_PLAYED_MAP = {
+    name: 'TBD',
+    videoURL: '',
+  };
+
   const [mapPoolData, setMapPoolData] = useState(defaultMapPoolData);
   const [actualScore, setActualScore] = useState(DEFAULT_SCORE);
+  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState(
+    DEFAULT_CURRENTLY_PLAYED_MAP
+  );
 
   useEffect(() => {
-    if (currentlyPlayedMap !== '') updateCurrentlyPlayedMap(currentlyPlayedMap);
+    if (currentlyPlayedMap.name !== '')
+      updateCurrentlyPlayedMap(currentlyPlayedMap);
   }, [currentlyPlayedMap]);
 
   useEffect(() => {
@@ -160,7 +169,6 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
         scoreTeam1Match: data.scoreTeam1Match,
         scoreTeam2Match: data.scoreTeam2Match,
       };
-      //console.log(data);
     });
   }, []);
 
@@ -174,7 +182,7 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   function fetchCurrentlyPlayedMap(dbCurrentlyPlayedMapRef) {
     onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
       const data = snapshot.val();
-      setCurrentlyPlayedMap(Object.values(data)[0]);
+      setCurrentlyPlayedMap(data);
     });
   }
 
@@ -200,8 +208,6 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     });
     let mapListValue = mapList.length === 0 ? [] : mapList;
 
-    console.log(refScore.current);
-
     set(newDocRef, {
       /*format: formatValue,
       numberMaps: numberMapsValue,
@@ -219,12 +225,13 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
       });
   }
 
-  function updateCurrentlyPlayedMap(mapName) {
+  function updateCurrentlyPlayedMap(map) {
     const db = getDatabase(app);
     const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
 
     set(dbCurrentlyPlayedMapRef, {
-      name: mapName,
+      name: map.name,
+      videoURL: map.videoURL,
     })
       .then(() => {})
       .catch((error) => {
@@ -260,9 +267,15 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     let lastPlayedMap = mapPoolData.findLastIndex(isLastPlayedMap);
 
     if (lastPlayedMap + 1 === mapPoolData.length) {
-      setCurrentlyPlayedMap(mapPoolData[mapPoolData.length - 1].map.nameMap);
+      setCurrentlyPlayedMap({
+        name: mapPoolData[mapPoolData.length - 1].map.nameMap,
+        videoURL: mapPoolData[mapPoolData.length - 1].map.videoUrlMap,
+      });
     } else {
-      setCurrentlyPlayedMap(mapPoolData[lastPlayedMap + 1].map.nameMap);
+      setCurrentlyPlayedMap({
+        name: mapPoolData[lastPlayedMap + 1].map.nameMap,
+        videoURL: mapPoolData[lastPlayedMap + 1].map.videoUrlMap,
+      });
     }
   }
 
@@ -326,14 +339,6 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   }
 
   function handleScoreMatchChange() {
-    /*
-    console.log(data[index]);
-    if (data[index].scoreTeam1Map === true) {
-      var occurrences = {};
-      for (var i = 0, j = arr.length; i < j; i++) {
-        occurrences[arr[i]] = (occurrences[arr[i]] || 0) + 1;
-      }
-    }*/
     setActualScore(DEFAULT_SCORE);
     mapPoolData.forEach(function (arrayItem) {
       if (
@@ -341,29 +346,21 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
         arrayItem.isFinishedMap === true
       ) {
         actualScore.scoreTeam1Match++;
-        console.log('Score Team1: ' + actualScore.scoreTeam1Match);
       } else if (
         currentTeam1.currentTeam2.name === arrayItem.resultMap.nameTeam &&
         arrayItem.isFinishedMap === true
       ) {
         actualScore.scoreTeam2Match++;
-        console.log('Score Team2: ' + actualScore.scoreTeam2Match);
       }
     });
     refScore.current = {
       scoreTeam1Match: actualScore.scoreTeam1Match,
       scoreTeam2Match: actualScore.scoreTeam2Match,
     };
-    console.log(refScore.current);
   }
 
   function handleTeamMatchChange() {
-    console.log('test handle après chanement team match');
-    console.log(mapPoolData);
-    console.log(currentTeam1.currentTeam1);
-
     mapPoolData.forEach(function (arrayItem, index) {
-      console.log(arrayItem);
       if (arrayItem.isFinishedMap === true) {
         if (arrayItem.scoreTeam1Map > arrayItem.scoreTeam2Map) {
           arrayItem.resultMap = {
@@ -571,11 +568,8 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
                       }
                       onClick={() => {
                         handleIsFinishedChange(indexMapPool);
-                        //handleScoreMatchChange();
-                        console.log(refScore.current);
                         setMapPoolData(Object.values(mapPoolData));
                         saveMapPool(Object.values(mapPoolData));
-                        //saveScoreMatch(actualScore);
                       }}
                     />
                   </td>

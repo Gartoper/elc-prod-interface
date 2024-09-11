@@ -211,8 +211,8 @@ export function GameModes() {
         <tbody>
           {gamemodeArray.map((item, index) => (
             <tr key={index}>
-              <td>{item.nameGamemode}</td>
-              <td>
+              <td className="align-middle">{item.nameGamemode}</td>
+              <td className="align-middle">
                 <img
                   src={item.imgUrlGamemode}
                   height={70}
@@ -221,7 +221,7 @@ export function GameModes() {
                   className="object-fit-contain"
                 />
               </td>
-              <td>
+              <td className="align-middle">
                 <Button
                   className={s.edit_button}
                   variant="warning"

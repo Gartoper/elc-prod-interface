@@ -24,6 +24,7 @@ export function Maps() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [inputValue3, setInputValue3] = useState('');
+  const [inputValue4, setInputValue4] = useState('');
   const [mapArray, setMapArray] = useState([]);
   const [gamemodeArray, setGamemodeArray] = useState([]);
   const [currentMapID, setCurrentMapID] = useState('');
@@ -35,6 +36,7 @@ export function Maps() {
     setInputValue1('');
     setInputValue2('');
     setInputValue3('');
+    setInputValue4('');
     setShowAddModal(false);
   }
   function handleShowAddModal() {
@@ -122,8 +124,6 @@ export function Maps() {
   }
 
   function saveData(event) {
-    console.log(inputValue1);
-    console.log(inputValue2);
     const form = event.currentTarget;
     event.preventDefault();
     event.stopPropagation();
@@ -146,11 +146,13 @@ export function Maps() {
           nameMap: inputValue1,
           gamemodeMap: inputValue2,
           imgUrlMap: inputValue3,
+          videoUrlMap: inputValue4,
         })
           .then(() => {
             setInputValue1('');
             setInputValue2('');
             setInputValue3('');
+            setInputValue4('');
             handleCloseUpdateModal();
             toast.success(
               showUpdateModal
@@ -239,15 +241,16 @@ export function Maps() {
             <th>Nom map</th>
             <th>Mode de jeu</th>
             <th>Aperçu map</th>
+            <th>Video</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {mapArray.map((item, index) => (
             <tr key={index}>
-              <td>{item.nameMap}</td>
-              <td>{item.gamemodeMap}</td>
-              <td>
+              <td className="align-middle">{item.nameMap}</td>
+              <td className="align-middle">{item.gamemodeMap}</td>
+              <td className="align-middle">
                 <img
                   src={item.imgUrlMap}
                   height={80}
@@ -256,7 +259,32 @@ export function Maps() {
                   className="object-fit-contain"
                 />
               </td>
-              <td>
+              <td className="align-middle">
+                {item.videoUrlMap !== '' ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="green"
+                    className="bi bi-check-lg"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="red"
+                    className="bi bi-x-lg"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                  </svg>
+                )}
+              </td>
+              <td className="align-middle">
                 <Button
                   className={s.edit_button}
                   variant="warning"
@@ -267,6 +295,7 @@ export function Maps() {
                     setInputValue1(item.nameMap);
                     setInputValue2(item.gamemodeMap);
                     setInputValue3(item.imgUrlMap);
+                    setInputValue4(item.videoUrlMap);
                   }}
                 >
                   <svg
@@ -383,12 +412,21 @@ export function Maps() {
                 </Form.Group>
               </Row>
               <Row className="mb-4">
-                <Form.Group as={Col} md="5">
+                <Form.Group as={Col} md="6">
                   <FloatingLabel label="URL image map">
                     <Form.Control
                       type="text"
                       value={inputValue3}
                       onChange={(e) => setInputValue3(e.target.value)}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <FloatingLabel label="URL video map">
+                    <Form.Control
+                      type="text"
+                      value={inputValue4}
+                      onChange={(e) => setInputValue4(e.target.value)}
                     />
                   </FloatingLabel>
                 </Form.Group>
