@@ -111,19 +111,19 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     },
   ];
 
-  const DEFAULT_CURRENTLY_PLAYED_MAP = {
-    name: 'TBD',
-    videoURL: '',
-  };
-
   const [mapPoolData, setMapPoolData] = useState(defaultMapPoolData);
   const [actualScore, setActualScore] = useState(DEFAULT_SCORE);
-  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState(
-    DEFAULT_CURRENTLY_PLAYED_MAP
-  );
+  const [currentlyPlayedMap, setCurrentlyPlayedMap] = useState(undefined);
+
+  function fetchCurrentlyPlayedMap(dbCurrentlyPlayedMapRef) {
+    onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
+      const data = snapshot.val();
+      setCurrentlyPlayedMap(data);
+    });
+  }
 
   useEffect(() => {
-    if (currentlyPlayedMap.name !== '')
+    if ((currentlyPlayedMap !== undefined && currentlyPlayedMap.name) !== '')
       updateCurrentlyPlayedMap(currentlyPlayedMap);
   }, [currentlyPlayedMap]);
 
@@ -187,13 +187,6 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
     });
   }
 
-  function fetchCurrentlyPlayedMap(dbCurrentlyPlayedMapRef) {
-    onValue(dbCurrentlyPlayedMapRef, (snapshot) => {
-      const data = snapshot.val();
-      setCurrentlyPlayedMap(data);
-    });
-  }
-
   const refScore = useRef({
     scoreTeam1Match: actualScore.scoreTeam1Match,
     scoreTeam2Match: actualScore.scoreTeam2Match,
@@ -235,20 +228,22 @@ export const MapPool = forwardRef(function (currentTeam1, refMapPool) {
   }
 
   function updateCurrentlyPlayedMap(map) {
-    const db = getDatabase(app);
-    const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
+    if (map !== undefined) {
+      const db = getDatabase(app);
+      const dbCurrentlyPlayedMapRef = ref(db, '0/panel/0/currentlyPlayedMap');
 
-    set(dbCurrentlyPlayedMapRef, {
-      name: map.name,
-      videoURL: map.videoURL,
-    })
-      .then(() => {})
-      .catch((error) => {
-        console.error(
-          'Erreur lors de la modification de la map actuellement jouée dans le panel: ',
-          error.message
-        );
-      });
+      set(dbCurrentlyPlayedMapRef, {
+        name: map.name,
+        videoURL: map.videoURL,
+      })
+        .then(() => {})
+        .catch((error) => {
+          console.error(
+            'Erreur lors de la modification de la map actuellement jouée dans le panel: ',
+            error.message
+          );
+        });
+    }
   }
 
   function handleGamemodeChange(index, itemGamemode) {
