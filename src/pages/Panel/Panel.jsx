@@ -941,6 +941,7 @@ export function Panel() {
     let palmaresValue = team === '' ? '' : team.palmares;
     let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
+    let sponsorsValue = team === '' ? [] : team.sponsors;
 
     set(newDocRef, {
       name: nameValue,
@@ -951,6 +952,7 @@ export function Panel() {
       palmares: palmaresValue,
       commentary: commentaryValue,
       players: playersValue,
+      sponsors: sponsorsValue,
     })
       .then(() => {
         refMapPool.current?.handleTeamMatchChange();
@@ -975,6 +977,7 @@ export function Panel() {
     let palmaresValue = team === '' ? '' : team.palmares;
     let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
+    let sponsorsValue = team === '' ? [] : team.sponsors;
 
     set(newDocRef, {
       name: nameValue,
@@ -985,6 +988,7 @@ export function Panel() {
       palmares: palmaresValue,
       commentary: commentaryValue,
       players: playersValue,
+      sponsors: sponsorsValue,
     })
       .then(() => {
         refMapPool.current?.handleTeamMatchChange();
@@ -1009,6 +1013,7 @@ export function Panel() {
     let palmaresValue = team === '' ? '' : team.palmares;
     let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
+    let sponsorsValue = team === '' ? [] : team.sponsors;
 
     set(newDocRef, {
       name: nameValue,
@@ -1019,6 +1024,7 @@ export function Panel() {
       palmares: palmaresValue,
       commentary: commentaryValue,
       players: playersValue,
+      sponsors: sponsorsValue,
     })
       .then(() => {})
       .catch((error) => {
@@ -1041,6 +1047,7 @@ export function Panel() {
     let palmaresValue = team === '' ? '' : team.palmares;
     let commentaryValue = team === '' ? '' : team.commentary;
     let playersValue = team === '' ? [] : team.players;
+    let sponsorsValue = team === '' ? [] : team.sponsors;
 
     set(newDocRef, {
       name: nameValue,
@@ -1051,6 +1058,7 @@ export function Panel() {
       palmares: palmaresValue,
       commentary: commentaryValue,
       players: playersValue,
+      sponsors: sponsorsValue,
     })
       .then(() => {})
       .catch((error) => {
