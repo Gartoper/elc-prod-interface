@@ -1,13 +1,16 @@
 import s from './style.module.css';
 import { toast } from 'react-toastify';
-import { useState, useEffect, useRef, React } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Roster } from '../../components/Roster/Roster';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
@@ -32,6 +35,7 @@ export function Teams() {
   const [teamArray, setTeamArray] = useState([]);
   const [currentTeamID, setCurrentTeamID] = useState('');
   const [currentTeam, setCurrentTeam] = useState('');
+  const [sponsorArray, setSponsorArray] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const searchBarRef = useRef();
@@ -44,7 +48,22 @@ export function Teams() {
     { pseudoPlayer: '', rolePlayer: '', heroPlayer: '', urlPhotoPlayer: '' },
   ];
 
+  const nothingSponsor = {
+    nameSponsor: 'Nothing',
+    urlLogoSponsor: 'https://panel.dragonsesport.fr/assets/Nothing.png',
+  };
+
+  const [defaultSponsor, setDefaultSponsor] = useState(nothingSponsor);
+  const defaultSponsorsData = [
+    defaultSponsor,
+    defaultSponsor,
+    defaultSponsor,
+    defaultSponsor,
+    defaultSponsor,
+  ];
+
   const [rosterData, setRosterData] = useState(defaultRosterData);
+  const [sponsorsData, setSponsorsData] = useState(defaultSponsorsData);
 
   function handleCloseAddModal() {
     setInputValue1('');
@@ -56,6 +75,7 @@ export function Teams() {
     setInputValue6('');
     setInputValue7('');
     setRosterData(defaultRosterData);
+    setSponsorsData(defaultSponsorsData);
     setShowAddModal(false);
   }
   function handleShowAddModal() {
@@ -72,8 +92,55 @@ export function Teams() {
     handleShowAddModal();
   }
 
+  const CustomSponsorSearchMenu = React.forwardRef(
+    ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
+      const [sponsorValue, setSponsorValue] = useState('');
+
+      return (
+        <div
+          ref={ref}
+          style={style}
+          className={className}
+          aria-labelledby={labeledBy}
+        >
+          <Form.Control
+            autoFocus
+            className="mx-3 my-2 w-auto"
+            placeholder="Taper le nom du sponsor..."
+            onChange={(e) => setSponsorValue(e.target.value.toLowerCase())}
+            value={sponsorValue}
+          />
+          <ul className="list-unstyled">
+            {React.Children.toArray(children).filter(
+              (child) =>
+                !sponsorValue ||
+                child.props.children.toLowerCase().includes(sponsorValue)
+            )}
+          </ul>
+        </div>
+      );
+    }
+  );
+
   useEffect(() => {
+    const db = getDatabase();
+    const dbSponsorRef = ref(db, '0/sponsors/0');
+
+    onValue(dbSponsorRef, (snapshot) => {
+      const data = snapshot.val();
+      let sortedSponsorArray = Object.values(data);
+      sortedSponsorArray.sort(function (a, b) {
+        return a.nameSponsor.toLowerCase() > b.nameSponsor.toLowerCase()
+          ? 1
+          : b.nameSponsor.toLowerCase() > a.nameSponsor.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setSponsorArray(sortedSponsorArray);
+    });
+
     fetchData();
+    fetchDefaultSponsorsData();
   }, []);
 
   useEffect(() => {
@@ -83,6 +150,22 @@ export function Teams() {
   useEffect(() => {
     setTeamDefaultLogo();
   }, [inputValue3]);
+
+  async function fetchDefaultSponsorsData() {
+    const db = getDatabase(app);
+    const dbRef = ref(
+      db,
+      '0/sponsors/0/' + process.env.REACT_APP_ID_SPONSOR_NOTHING
+    );
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      setDefaultSponsor({
+        nameSponsor: data.nameSponsor,
+        urlLogoSponsor: data.urlLogoSponsor,
+      });
+    });
+  }
 
   async function fetchData() {
     const db = getDatabase(app);
@@ -132,6 +215,206 @@ export function Teams() {
     }
   }
 
+  const CustomSponsor1Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="secondary"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            let data = [...sponsorsData];
+            data[0] = {
+              nameSponsor: defaultSponsor.nameSponsor,
+              urlLogoSponsor: defaultSponsor.urlLogoSponsor,
+            };
+            setSponsorsData(data);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="11"
+            height="11"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor2Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="secondary"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            let data = [...sponsorsData];
+            data[1] = {
+              nameSponsor: defaultSponsor.nameSponsor,
+              urlLogoSponsor: defaultSponsor.urlLogoSponsor,
+            };
+            setSponsorsData(data);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="11"
+            height="11"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor3Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="secondary"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            let data = [...sponsorsData];
+            data[2] = {
+              nameSponsor: defaultSponsor.nameSponsor,
+              urlLogoSponsor: defaultSponsor.urlLogoSponsor,
+            };
+            setSponsorsData(data);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="11"
+            height="11"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor4Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="secondary"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            let data = [...sponsorsData];
+            data[3] = {
+              nameSponsor: defaultSponsor.nameSponsor,
+              urlLogoSponsor: defaultSponsor.urlLogoSponsor,
+            };
+            setSponsorsData(data);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="11"
+            height="11"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor5Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="secondary"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            let data = [...sponsorsData];
+            data[4] = {
+              nameSponsor: defaultSponsor.nameSponsor,
+              urlLogoSponsor: defaultSponsor.urlLogoSponsor,
+            };
+            setSponsorsData(data);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="11"
+            height="11"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
   function saveData(event) {
     const form = event.currentTarget;
     event.preventDefault();
@@ -160,6 +443,7 @@ export function Teams() {
           palmares: inputValue6,
           commentary: inputValue7,
           players: rosterData,
+          sponsors: sponsorsData,
         })
           .then(() => {
             setInputValue1('');
@@ -170,6 +454,7 @@ export function Teams() {
             setInputValue6('');
             setInputValue7('');
             setRosterData(defaultRosterData);
+            setSponsorsData(defaultSponsorsData);
             handleCloseUpdateModal();
             toast.success(
               showUpdateModal
@@ -315,6 +600,7 @@ export function Teams() {
                         setInputValue6(item.palmares);
                         setInputValue7(item.commentary);
                         setRosterData(item.players);
+                        setSponsorsData(item.sponsors);
                       }}
                     >
                       <svg
@@ -393,6 +679,12 @@ export function Teams() {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <h1
+              style={{ color: 'white', textDecoration: 'underline' }}
+              className="mb-3"
+            >
+              Informations générales
+            </h1>
             <Col xs={12}>
               <Row className="mb-4">
                 <Form.Group as={Col} md="7">
@@ -464,7 +756,185 @@ export function Teams() {
                 />
               </FloatingLabel>
               <Row className="mb-4">
+                <h1
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                  className="mt-5"
+                >
+                  Roster
+                </h1>
                 <Roster rosterData={rosterData} setRosterData={setRosterData} />
+              </Row>
+              <Row>
+                <Row>
+                  <h1
+                    style={{ color: 'white', textDecoration: 'underline' }}
+                    className="mt-5"
+                  >
+                    Sponsors
+                  </h1>
+                </Row>
+                <Row className="justify-content-center mt-4">
+                  <Col>
+                    <ButtonGroup className="d-flex justify-content-center">
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomSponsor1Toggle}>
+                          {sponsorsData[0].nameSponsor === '' ? (
+                            <span className={s.no_sponsor_txt}>
+                              Pas de Sponsor #1
+                            </span>
+                          ) : (
+                            <span>{sponsorsData[0].nameSponsor}</span>
+                          )}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                          {sponsorArray.map((item, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                let data = [...sponsorsData];
+                                data[0] = {
+                                  nameSponsor: item.nameSponsor,
+                                  urlLogoSponsor: item.urlLogoSponsor,
+                                };
+                                setSponsorsData(data);
+                              }}
+                            >
+                              {item.nameSponsor}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </Col>
+                  <Col>
+                    <ButtonGroup className="d-flex justify-content-center">
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomSponsor2Toggle}>
+                          {sponsorsData[1].nameSponsor === '' ? (
+                            <span className={s.no_sponsor_txt}>
+                              Pas de Sponsor #2
+                            </span>
+                          ) : (
+                            <span>{sponsorsData[1].nameSponsor}</span>
+                          )}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                          {sponsorArray.map((item, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                let data = [...sponsorsData];
+                                data[1] = {
+                                  nameSponsor: item.nameSponsor,
+                                  urlLogoSponsor: item.urlLogoSponsor,
+                                };
+                                setSponsorsData(data);
+                              }}
+                            >
+                              {item.nameSponsor}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </Col>
+                  <Col>
+                    <ButtonGroup className="d-flex justify-content-center">
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomSponsor3Toggle}>
+                          {sponsorsData[2].nameSponsor === '' ? (
+                            <span className={s.no_sponsor_txt}>
+                              Pas de Sponsor #3
+                            </span>
+                          ) : (
+                            <span>{sponsorsData[2].nameSponsor}</span>
+                          )}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                          {sponsorArray.map((item, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                let data = [...sponsorsData];
+                                data[2] = {
+                                  nameSponsor: item.nameSponsor,
+                                  urlLogoSponsor: item.urlLogoSponsor,
+                                };
+                                setSponsorsData(data);
+                              }}
+                            >
+                              {item.nameSponsor}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </Col>
+                  <Col>
+                    <ButtonGroup className="d-flex justify-content-center">
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomSponsor4Toggle}>
+                          {sponsorsData[3].nameSponsor === '' ? (
+                            <span className={s.no_sponsor_txt}>
+                              Pas de Sponsor #4
+                            </span>
+                          ) : (
+                            <span>{sponsorsData[3].nameSponsor}</span>
+                          )}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                          {sponsorArray.map((item, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                let data = [...sponsorsData];
+                                data[3] = {
+                                  nameSponsor: item.nameSponsor,
+                                  urlLogoSponsor: item.urlLogoSponsor,
+                                };
+                                setSponsorsData(data);
+                              }}
+                            >
+                              {item.nameSponsor}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </Col>
+                  <Col>
+                    <ButtonGroup className="d-flex justify-content-center">
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomSponsor5Toggle}>
+                          {sponsorsData[4].nameSponsor === '' ? (
+                            <span className={s.no_sponsor_txt}>
+                              Pas de Sponsor #5
+                            </span>
+                          ) : (
+                            <span>{sponsorsData[4].nameSponsor}</span>
+                          )}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                          {sponsorArray.map((item, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => {
+                                let data = [...sponsorsData];
+                                data[4] = {
+                                  nameSponsor: item.nameSponsor,
+                                  urlLogoSponsor: item.urlLogoSponsor,
+                                };
+                                setSponsorsData(data);
+                              }}
+                            >
+                              {item.nameSponsor}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </ButtonGroup>
+                  </Col>
+                </Row>
               </Row>
             </Col>
           </Modal.Body>
