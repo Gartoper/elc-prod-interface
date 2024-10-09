@@ -32,6 +32,7 @@ import {
 
 export function Panel() {
   const [broadcastTalentArray, setBroadcastTalentArray] = useState([]);
+  const [sponsorArray, setSponsorArray] = useState([]);
   const [formatArray, setFormatArray] = useState([]);
   const [currentHost, setCurrentHost] = useState('');
   const [currentCaster1, setCurrentCaster1] = useState('');
@@ -39,6 +40,9 @@ export function Panel() {
   const [currentAnalyst, setCurrentAnalyst] = useState('');
   const [currentInterview1, setCurrentInterview1] = useState('');
   const [currentInterview2, setCurrentInterview2] = useState('');
+  const [currentSponsor1, setCurrentSponsor1] = useState('');
+  const [currentSponsor2, setCurrentSponsor2] = useState('');
+  const [currentSponsor3, setCurrentSponsor3] = useState('');
   const [currentFormat, setCurrentFormat] = useState('');
   const [teamArray, setTeamArray] = useState([]);
   const [currentTeam1, setCurrentTeam1] = useState({});
@@ -295,6 +299,114 @@ export function Panel() {
     )
   );
 
+  const CustomSponsor1Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="dark"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            setCurrentSponsor1('');
+            saveSponsor1('');
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor2Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="dark"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            setCurrentSponsor2('');
+            saveSponsor2('');
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
+  const CustomSponsor3Toggle = React.forwardRef(
+    ({ children, onClick }, ref) => (
+      <InputGroup>
+        <Dropdown.Toggle
+          variant="dark"
+          size="lg"
+          ref={ref}
+          onClick={(e) => {
+            e.preventDefault();
+            onClick(e);
+          }}
+        >
+          {children}
+        </Dropdown.Toggle>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            setCurrentSponsor3('');
+            saveSponsor3('');
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-x-lg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </Button>
+      </InputGroup>
+    )
+  );
+
   const CustomTeamSearchMenu = React.forwardRef(
     ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
       const [value, setValue] = useState('');
@@ -358,12 +470,43 @@ export function Panel() {
     }
   );
 
+  const CustomSponsorSearchMenu = React.forwardRef(
+    ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
+      const [sponsorValue, setSponsorValue] = useState('');
+
+      return (
+        <div
+          ref={ref}
+          style={style}
+          className={className}
+          aria-labelledby={labeledBy}
+        >
+          <Form.Control
+            autoFocus
+            className="mx-3 my-2 w-auto"
+            placeholder="Taper le nom du sponsor..."
+            onChange={(e) => setSponsorValue(e.target.value.toLowerCase())}
+            value={sponsorValue}
+          />
+          <ul className="list-unstyled">
+            {React.Children.toArray(children).filter(
+              (child) =>
+                !sponsorValue ||
+                child.props.children.toLowerCase().includes(sponsorValue)
+            )}
+          </ul>
+        </div>
+      );
+    }
+  );
+
   useEffect(() => {
     const db = getDatabase();
     const dbRef = ref(db, '0/broadcastTalents/0');
     const dbFormatRef = ref(db, '0/formats/0');
     const dbScoreMatchRef = ref(db, '0/panel/0/mappool/scoreMatch');
     const dbTournamentTitleRef = ref(db, '0/panel/0/tournamentTitle');
+    const dbSponsorRef = ref(db, '0/sponsors/0');
 
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
@@ -378,6 +521,19 @@ export function Panel() {
           : 0;
       });
       setBroadcastTalentArray(sortedBroadcastTalentArray);
+    });
+
+    onValue(dbSponsorRef, (snapshot) => {
+      const data = snapshot.val();
+      let sortedSponsorArray = Object.values(data);
+      sortedSponsorArray.sort(function (a, b) {
+        return a.nameSponsor.toLowerCase() > b.nameSponsor.toLowerCase()
+          ? 1
+          : b.nameSponsor.toLowerCase() > a.nameSponsor.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setSponsorArray(sortedSponsorArray);
     });
 
     onValue(dbFormatRef, (snapshot) => {
@@ -688,6 +844,66 @@ export function Panel() {
       .catch((error) => {
         console.error(
           "Erreur lors de l'ajout de itw2 dans le panel: ",
+          error.message
+        );
+      });
+  }
+
+  async function saveSponsor1(sponsor) {
+    const db = getDatabase(app);
+    const newDocRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor1');
+
+    let nameValue = sponsor === '' ? '' : sponsor.nameSponsor;
+    let urlLogoValue = sponsor === '' ? '' : sponsor.urlLogoSponsor;
+
+    set(newDocRef, {
+      name: nameValue,
+      urlLogo: urlLogoValue,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          "Erreur lors de l'ajout de sponsor1 dans le panel: ",
+          error.message
+        );
+      });
+  }
+
+  async function saveSponsor2(sponsor) {
+    const db = getDatabase(app);
+    const newDocRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor2');
+
+    let nameValue = sponsor === '' ? '' : sponsor.nameSponsor;
+    let urlLogoValue = sponsor === '' ? '' : sponsor.urlLogoSponsor;
+
+    set(newDocRef, {
+      name: nameValue,
+      urlLogo: urlLogoValue,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          "Erreur lors de l'ajout de sponsor2 dans le panel: ",
+          error.message
+        );
+      });
+  }
+
+  async function saveSponsor3(sponsor) {
+    const db = getDatabase(app);
+    const newDocRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor3');
+
+    let nameValue = sponsor === '' ? '' : sponsor.nameSponsor;
+    let urlLogoValue = sponsor === '' ? '' : sponsor.urlLogoSponsor;
+
+    set(newDocRef, {
+      name: nameValue,
+      urlLogo: urlLogoValue,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.error(
+          "Erreur lors de l'ajout de sponsor3 dans le panel: ",
           error.message
         );
       });
@@ -1496,6 +1712,88 @@ export function Panel() {
               </Card.Body>
             </Card>
           </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col />
+          <Col xs={3}>
+            <ButtonGroup className="d-flex justify-content-center">
+              <Dropdown>
+                <Dropdown.Toggle as={CustomSponsor1Toggle}>
+                  {currentSponsor1 === '' ? (
+                    <span className={s.no_sponsor_txt}>Pas de Sponsor #1</span>
+                  ) : (
+                    <span>{currentSponsor1}</span>
+                  )}
+                </Dropdown.Toggle>
+                <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                  {sponsorArray.map((item, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => {
+                        setCurrentSponsor1(item.nameSponsor);
+                        saveSponsor1(item);
+                      }}
+                    >
+                      {item.nameSponsor}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </ButtonGroup>
+          </Col>
+          <Col xs={3}>
+            <ButtonGroup className="d-flex justify-content-center">
+              <Dropdown>
+                <Dropdown.Toggle as={CustomSponsor2Toggle}>
+                  {currentSponsor2 === '' ? (
+                    <span className={s.no_sponsor_txt}>Pas de Sponsor #2</span>
+                  ) : (
+                    <span>{currentSponsor2}</span>
+                  )}
+                </Dropdown.Toggle>
+                <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                  {sponsorArray.map((item, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => {
+                        setCurrentSponsor2(item.nameSponsor);
+                        saveSponsor2(item);
+                      }}
+                    >
+                      {item.nameSponsor}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </ButtonGroup>
+          </Col>
+          <Col xs={3}>
+            <ButtonGroup className="d-flex justify-content-center">
+              <Dropdown>
+                <Dropdown.Toggle as={CustomSponsor3Toggle}>
+                  {currentSponsor3 === '' ? (
+                    <span className={s.no_sponsor_txt}>Pas de Sponsor #3</span>
+                  ) : (
+                    <span>{currentSponsor3}</span>
+                  )}
+                </Dropdown.Toggle>
+                <Dropdown.Menu as={CustomSponsorSearchMenu}>
+                  {sponsorArray.map((item, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => {
+                        setCurrentSponsor3(item.nameSponsor);
+                        saveSponsor3(item);
+                      }}
+                    >
+                      {item.nameSponsor}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </ButtonGroup>
+          </Col>
+          <Col />
         </Row>
         <Row>
           <Countdown />
