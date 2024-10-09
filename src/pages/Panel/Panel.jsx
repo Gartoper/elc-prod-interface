@@ -2,6 +2,7 @@ import s from './style.module.css';
 import doubleArrowImg from '../../assets/images/double-arrow.png';
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { Countdown } from '../../components/Countdown/Countdown';
 import { MapPool } from '../../components/MapPool/MapPool';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -1495,6 +1496,9 @@ export function Panel() {
               </Card.Body>
             </Card>
           </Col>
+        </Row>
+        <Row>
+          <Countdown />
         </Row>
         <Row>
           <MapPool
