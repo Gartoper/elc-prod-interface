@@ -14,6 +14,7 @@ import { Heros } from './pages/Heros/Heros';
 import { Roles } from './pages/Roles/Roles';
 import { GameModes } from './pages/GameModes/GameModes';
 import { Maps } from './pages/Maps/Maps';
+import { Sponsors } from './pages/Sponsors/Sponsors';
 
 export function App() {
   return (
@@ -29,6 +30,7 @@ export function App() {
           <Route index element={<Home />} />
           <Route path="/panel" element={<Panel />} />
           <Route path="broadcast-talents" element={<BroadcastTalents />} />
+          <Route path="sponsors" element={<Sponsors />} />
           <Route path="teams" element={<Teams />} />
           <Route path="heros" element={<Heros />} />
           <Route path="roles" element={<Roles />} />
