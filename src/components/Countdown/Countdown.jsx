@@ -103,7 +103,7 @@ export function Countdown() {
   };
 
   return (
-    <Row style={{ textAlign: 'right', marginTop: '20px' }}>
+    <Row style={{ textAlign: 'right', marginTop: '30px' }}>
       <Col />
       <Col xs={1}>
         <h2>

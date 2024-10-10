@@ -301,109 +301,130 @@ export function Panel() {
 
   const CustomSponsor1Toggle = React.forwardRef(
     ({ children, onClick }, ref) => (
-      <InputGroup>
-        <Dropdown.Toggle
-          variant="dark"
-          size="lg"
-          ref={ref}
-          onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-          }}
-        >
-          {children}
-        </Dropdown.Toggle>
-        <Button
-          variant="outline-danger"
-          onClick={() => {
-            setCurrentSponsor1('');
-            saveSponsor1('');
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-x-lg"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-          </svg>
-        </Button>
-      </InputGroup>
+      <>
+        <Row>
+          <InputGroup>
+            <Dropdown.Toggle
+              variant="dark"
+              size="lg"
+              ref={ref}
+              onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+              }}
+            >
+              {children}
+            </Dropdown.Toggle>
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                setCurrentSponsor1('');
+                saveSponsor1('');
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </Button>
+          </InputGroup>
+        </Row>
+        <Row>
+          <Form.Text className="text-muted text-center">Sponsor #1</Form.Text>
+        </Row>
+      </>
     )
   );
 
   const CustomSponsor2Toggle = React.forwardRef(
     ({ children, onClick }, ref) => (
-      <InputGroup>
-        <Dropdown.Toggle
-          variant="dark"
-          size="lg"
-          ref={ref}
-          onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-          }}
-        >
-          {children}
-        </Dropdown.Toggle>
-        <Button
-          variant="outline-danger"
-          onClick={() => {
-            setCurrentSponsor2('');
-            saveSponsor2('');
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-x-lg"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-          </svg>
-        </Button>
-      </InputGroup>
+      <>
+        <Row>
+          <InputGroup>
+            <Dropdown.Toggle
+              variant="dark"
+              size="lg"
+              ref={ref}
+              onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+              }}
+            >
+              {children}
+            </Dropdown.Toggle>
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                setCurrentSponsor2('');
+                saveSponsor2('');
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </Button>
+          </InputGroup>
+        </Row>
+        <Row>
+          <Form.Text className="text-muted text-center">Sponsor #2</Form.Text>
+        </Row>
+      </>
     )
   );
 
   const CustomSponsor3Toggle = React.forwardRef(
     ({ children, onClick }, ref) => (
-      <InputGroup>
-        <Dropdown.Toggle
-          variant="dark"
-          size="lg"
-          ref={ref}
-          onClick={(e) => {
-            e.preventDefault();
-            onClick(e);
-          }}
-        >
-          {children}
-        </Dropdown.Toggle>
-        <Button
-          variant="outline-danger"
-          onClick={() => {
-            setCurrentSponsor3('');
-            saveSponsor3('');
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-x-lg"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-          </svg>
-        </Button>
-      </InputGroup>
+      <>
+        <Row>
+          <InputGroup>
+            <Dropdown.Toggle
+              variant="dark"
+              size="lg"
+              ref={ref}
+              onClick={(e) => {
+                e.preventDefault();
+                onClick(e);
+              }}
+            >
+              {children}
+            </Dropdown.Toggle>
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                setCurrentSponsor3('');
+                saveSponsor3('');
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </Button>
+          </InputGroup>
+        </Row>
+        <Row>
+          <Form.Text className="text-muted text-center">Sponsor #3</Form.Text>
+        </Row>
+      </>
     )
   );
 
@@ -573,6 +594,9 @@ export function Panel() {
     fetchTournamentTitle();
     fetchCurrentMapPoolData();
     fetchCurrentlyPlayedMap();
+    fetchSponsorProduction1();
+    fetchSponsorProduction2();
+    fetchSponsorProduction3();
   }, []);
 
   useEffect(() => {
@@ -714,6 +738,39 @@ export function Panel() {
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
       if (data !== null) setCurrentlyPlayedMap(data);
+    });
+  }
+
+  async function fetchSponsorProduction1() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor1');
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data.name);
+      setCurrentSponsor1(data.name);
+    });
+  }
+
+  async function fetchSponsorProduction2() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor2');
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data.name);
+      setCurrentSponsor2(data.name);
+    });
+  }
+
+  async function fetchSponsorProduction3() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/panel/0/sponsorsProduction/0/sponsor3');
+
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data.name);
+      setCurrentSponsor3(data.name);
     });
   }
 
@@ -1728,7 +1785,7 @@ export function Panel() {
               <Dropdown>
                 <Dropdown.Toggle as={CustomSponsor1Toggle}>
                   {currentSponsor1 === '' ? (
-                    <span className={s.no_sponsor_txt}>Pas de Sponsor #1</span>
+                    <span className={s.no_sponsor_txt}>Nothing</span>
                   ) : (
                     <span>{currentSponsor1}</span>
                   )}
@@ -1754,7 +1811,7 @@ export function Panel() {
               <Dropdown>
                 <Dropdown.Toggle as={CustomSponsor2Toggle}>
                   {currentSponsor2 === '' ? (
-                    <span className={s.no_sponsor_txt}>Pas de Sponsor #2</span>
+                    <span className={s.no_sponsor_txt}>Nothing</span>
                   ) : (
                     <span>{currentSponsor2}</span>
                   )}
@@ -1780,7 +1837,7 @@ export function Panel() {
               <Dropdown>
                 <Dropdown.Toggle as={CustomSponsor3Toggle}>
                   {currentSponsor3 === '' ? (
-                    <span className={s.no_sponsor_txt}>Pas de Sponsor #3</span>
+                    <span className={s.no_sponsor_txt}>Nothing</span>
                   ) : (
                     <span>{currentSponsor3}</span>
                   )}
