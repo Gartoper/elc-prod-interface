@@ -32,7 +32,10 @@ export function Teams() {
   const [inputValue5, setInputValue5] = useState('');
   const [inputValue6, setInputValue6] = useState('');
   const [inputValue7, setInputValue7] = useState('');
-  const [teamArray, setTeamArray] = useState([]);
+  const [teamArray, setTeamArray] = useState(() => {
+    const storedTeams = localStorage.getItem('allTeams');
+    return storedTeams ? JSON.parse(storedTeams) : [];
+  });
   const [currentTeamID, setCurrentTeamID] = useState('');
   const [currentTeam, setCurrentTeam] = useState('');
   const [sponsorArray, setSponsorArray] = useState([]);
@@ -168,43 +171,11 @@ export function Teams() {
   }
 
   async function fetchData() {
-    const db = getDatabase(app);
-    const dbRef = ref(db, '0/teams/0');
-    onValue(dbRef, (snapshot) => {
-      const data = snapshot.val();
-      let sortedTeamArray = Object.values(data);
-      sortedTeamArray.sort(function (a, b) {
-        return a.name.toLowerCase() > b.name.toLowerCase()
-          ? 1
-          : b.name.toLowerCase() > a.name.toLowerCase()
-          ? -1
-          : 0;
-      });
-      setTeamArray(sortedTeamArray);
-    });
+    setAllTeamsInCache();
   }
 
   async function updateData() {
-    const db = getDatabase(app);
-    const dbRef = ref(db, '0/teams/0');
-    onValue(dbRef, (snapshot) => {
-      const data = snapshot.val();
-      const tmpArray = Object.keys(data).map((objectId) => {
-        return {
-          ...data[objectId],
-          idTeam: objectId,
-        };
-      });
-      let sortedTeamArray = tmpArray;
-      sortedTeamArray.sort(function (a, b) {
-        return a.name.toLowerCase() > b.name.toLowerCase()
-          ? 1
-          : b.name.toLowerCase() > a.name.toLowerCase()
-          ? -1
-          : 0;
-      });
-      setTeamArray(sortedTeamArray);
-    });
+    setAllTeamsInCache();
   }
 
   async function setTeamDefaultLogo() {
@@ -468,6 +439,7 @@ export function Teams() {
       }
     }
     handleClearSearchInput();
+    setAllTeamsInCache();
   }
 
   async function deleteData(idTeam) {
@@ -492,6 +464,30 @@ export function Teams() {
 
   function handleClearSearchInput() {
     searchBarRef.current.clearSearchInput();
+  }
+
+  function setAllTeamsInCache() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, '0/teams/0');
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      const tmpArray = Object.keys(data).map((objectId) => {
+        return {
+          ...data[objectId],
+          idTeam: objectId,
+        };
+      });
+      let sortedTeamArray = tmpArray;
+      sortedTeamArray.sort(function (a, b) {
+        return a.name.toLowerCase() > b.name.toLowerCase()
+          ? 1
+          : b.name.toLowerCase() > a.name.toLowerCase()
+          ? -1
+          : 0;
+      });
+      setTeamArray(sortedTeamArray);
+      localStorage.setItem('allTeams', JSON.stringify(sortedTeamArray));
+    });
   }
 
   return (
