@@ -14,10 +14,18 @@ export const SearchBar = forwardRef(function (props, searchBarRef) {
   const { getSearchedTeams } = props;
   const [search, setSearch] = useState('');
   const [filteredResults, setFilteredResults] = useState([]);
-  const [allTeams, setAllTeams] = useState([]);
+  const [allTeams, setAllTeams] = useState(() => {
+    const storedTeams = localStorage.getItem('allTeams');
+    return storedTeams ? JSON.parse(storedTeams) : [];
+  });
 
   useEffect(() => {
-    fetchData();
+    const storedTeams = localStorage.getItem('allTeams');
+    if (storedTeams) {
+      setAllTeams(JSON.parse(storedTeams));
+    } else {
+      fetchData();
+    }
   }, []);
 
   async function fetchData() {
@@ -40,6 +48,7 @@ export const SearchBar = forwardRef(function (props, searchBarRef) {
           : 0;
       });
       setAllTeams(sortedTeamArray);
+      localStorage.setItem('allTeams', JSON.stringify(sortedTeamArray));
     });
   }
 
