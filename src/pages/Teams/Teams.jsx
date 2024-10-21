@@ -12,6 +12,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Modal from 'react-bootstrap/Modal';
+import Pagination from 'react-bootstrap/Pagination';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 import app from '../../firebaseConfig';
@@ -41,6 +42,8 @@ export function Teams() {
   const [sponsorArray, setSponsorArray] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [teamsPerPage, setTeamsPerPage] = useState(10);
   const searchBarRef = useRef();
 
   const defaultRosterData = [
@@ -153,6 +156,18 @@ export function Teams() {
   useEffect(() => {
     setTeamDefaultLogo();
   }, [inputValue3]);
+
+  const indexOfLastTeam = currentPage * teamsPerPage;
+  const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
+  const currentTeamsOnPage = teamArray.slice(indexOfFirstTeam, indexOfLastTeam);
+  function paginate(pageNumber) {
+    setCurrentPage(pageNumber);
+    setTimeout(() => {
+      document
+        .getElementById('pageTitle')
+        .scrollIntoView({ behavior: 'smooth' });
+    }, 10);
+  }
 
   async function fetchDefaultSponsorsData() {
     const db = getDatabase(app);
@@ -460,6 +475,7 @@ export function Teams() {
 
   function getSearchedTeams(teams) {
     setTeamArray(teams);
+    setCurrentPage(1);
   }
 
   function handleClearSearchInput() {
@@ -495,7 +511,7 @@ export function Teams() {
       <Row className="mb-4">
         <Col />
         <Col xs={10}>
-          <h1>Page Equipes</h1>
+          <h1 id="pageTitle">Page Equipes</h1>
         </Col>
         <Col />
       </Row>
@@ -523,143 +539,180 @@ export function Teams() {
         <Col xs={3}>
           <SearchBar getSearchedTeams={getSearchedTeams} ref={searchBarRef} />
         </Col>
+        <Col className="d-flex justify-content-end">
+          <Pagination>
+            {[...Array(Math.ceil(teamArray.length / teamsPerPage))].map(
+              (_, i) => (
+                <Pagination.Item
+                  key={i}
+                  active={i + 1 === currentPage}
+                  onClick={() => {
+                    paginate(i + 1);
+                  }}
+                >
+                  {i + 1}
+                </Pagination.Item>
+              )
+            )}
+          </Pagination>
+        </Col>
       </Row>
-      <Table className="mt-4" striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th style={{ width: '8%' }}>Nom équipe</th>
-            <th style={{ width: '8%' }}>Logo</th>
-            <th style={{ width: '18%' }}>Joueurs</th>
-            <th style={{ width: '32%' }}>Divers</th>
-            <th style={{ width: '12%' }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {teamArray.map((item, index) => (
-            <tr key={index}>
-              <td>{item.name}</td>
-              <td>
-                <img
-                  src={item.imgUrl}
-                  height={70}
-                  width={70}
-                  alt={item.name}
-                  className="object-fit-contain"
-                />
-              </td>
-
-              <td className="p-0">
-                <Table hover className="mb-0">
-                  <tbody>
-                    {item.players.map((player, index) => (
-                      <tr key={index}>
-                        <td>{player.pseudoPlayer}</td>
-                        <td>{player.rolePlayer}</td>
-                        <td>{player.heroPlayer}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </td>
-              <td>
-                <Row xs={12} className="mx-2">
-                  Couleur: {item.color}
-                </Row>
-                <Row xs={12} className="mx-2">
-                  Abbréviation: {item.shortName}
-                </Row>
-                <Row xs={12} className="mx-2">
-                  Score/Rank: {item.score}
-                </Row>
-                <Row xs={12} className="mx-2 mt-4 mb-4">
-                  Palmarès: {item.palmares}
-                </Row>
-                <Row xs={12} className="mx-2">
-                  Commentaires: {item.commentary}
-                </Row>
-              </td>
-              <td>
-                {item.idTeam !== process.env.REACT_APP_ID_TEAM_TBD && (
-                  <>
-                    <Button
-                      className={s.edit_button}
-                      variant="warning"
-                      onClick={() => {
-                        handleShowUpdateModal();
-                        setCurrentTeam(item);
-                        setCurrentTeamID(item.idTeam);
-                        setInputValue1(item.name);
-                        setInputValue2(item.shortName);
-                        setInputValue3(item.imgUrl);
-                        setInputValue4(item.color);
-                        setInputValue5(item.score);
-                        setInputValue6(item.palmares);
-                        setInputValue7(item.commentary);
-                        setRosterData(item.players);
-                        setSponsorsData(item.sponsors);
-                      }}
-                    >
-                      <svg
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        className={s.edit_icon}
+      <Row>
+        <Table className="mt-4" striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th style={{ width: '8%' }}>Nom équipe</th>
+              <th style={{ width: '8%' }}>Logo</th>
+              <th style={{ width: '18%' }}>Joueurs</th>
+              <th style={{ width: '32%' }}>Divers</th>
+              <th style={{ width: '12%' }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentTeamsOnPage.map((item, index) => (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>
+                  <img
+                    src={item.imgUrl}
+                    height={70}
+                    width={70}
+                    alt={item.name}
+                    className="object-fit-contain"
+                  />
+                </td>
+                <td className="p-0">
+                  <Table hover className="mb-0">
+                    <tbody>
+                      {item.players.map((player, index) => (
+                        <tr key={index}>
+                          <td>{player.pseudoPlayer}</td>
+                          <td>{player.rolePlayer}</td>
+                          <td>{player.heroPlayer}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </td>
+                <td>
+                  <Row xs={12} className="mx-2">
+                    Couleur: {item.color}
+                  </Row>
+                  <Row xs={12} className="mx-2">
+                    Abbréviation: {item.shortName}
+                  </Row>
+                  <Row xs={12} className="mx-2">
+                    Score/Rank: {item.score}
+                  </Row>
+                  <Row xs={12} className="mx-2 mt-4 mb-4">
+                    Palmarès: {item.palmares}
+                  </Row>
+                  <Row xs={12} className="mx-2">
+                    Commentaires: {item.commentary}
+                  </Row>
+                </td>
+                <td>
+                  {item.idTeam !== process.env.REACT_APP_ID_TEAM_TBD && (
+                    <>
+                      <Button
+                        className={s.edit_button}
+                        variant="warning"
+                        onClick={() => {
+                          handleShowUpdateModal();
+                          setCurrentTeam(item);
+                          setCurrentTeamID(item.idTeam);
+                          setInputValue1(item.name);
+                          setInputValue2(item.shortName);
+                          setInputValue3(item.imgUrl);
+                          setInputValue4(item.color);
+                          setInputValue5(item.score);
+                          setInputValue6(item.palmares);
+                          setInputValue7(item.commentary);
+                          setRosterData(item.players);
+                          setSponsorsData(item.sponsors);
+                        }}
                       >
-                        <path
-                          id="Shape"
-                          d="M.75,17.5A.751.751,0,0,1,0,16.75V12.569a.755.755,0,0,1,.22-.53L11.461.8a2.72,2.72,0,0,1,3.848,0L16.7,2.191a2.72,2.72,0,0,1,0,3.848L5.462,17.28a.747.747,0,0,1-.531.22ZM1.5,12.879V16h3.12l7.91-7.91L9.41,4.97ZM13.591,7.03l2.051-2.051a1.223,1.223,0,0,0,0-1.727L14.249,1.858a1.222,1.222,0,0,0-1.727,0L10.47,3.91Z"
-                          transform="translate(3.25 3.25)"
-                          fill="#141124"
-                        />
-                      </svg>
-                      <span>Update</span>
-                    </Button>
-                    <Button
-                      className={s.delete_button}
-                      variant="danger"
-                      onClick={() => {
-                        deleteData(item.idTeam);
-                      }}
-                    >
-                      <svg
-                        width="24px"
-                        height="24px"
-                        viewBox="0 -0.5 21 21"
-                        className={s.delete_icon}
+                        <svg
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
+                          className={s.edit_icon}
+                        >
+                          <path
+                            id="Shape"
+                            d="M.75,17.5A.751.751,0,0,1,0,16.75V12.569a.755.755,0,0,1,.22-.53L11.461.8a2.72,2.72,0,0,1,3.848,0L16.7,2.191a2.72,2.72,0,0,1,0,3.848L5.462,17.28a.747.747,0,0,1-.531.22ZM1.5,12.879V16h3.12l7.91-7.91L9.41,4.97ZM13.591,7.03l2.051-2.051a1.223,1.223,0,0,0,0-1.727L14.249,1.858a1.222,1.222,0,0,0-1.727,0L10.47,3.91Z"
+                            transform="translate(3.25 3.25)"
+                            fill="#141124"
+                          />
+                        </svg>
+                        <span>Update</span>
+                      </Button>
+                      <Button
+                        className={s.delete_button}
+                        variant="danger"
+                        onClick={() => {
+                          deleteData(item.idTeam);
+                        }}
                       >
-                        <g
-                          id="Page-1"
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
+                        <svg
+                          width="24px"
+                          height="24px"
+                          viewBox="0 -0.5 21 21"
+                          className={s.delete_icon}
                         >
                           <g
-                            id="Dribbble-Light-Preview"
-                            transform="translate(-179.000000, -360.000000)"
-                            fill="#ffffff"
+                            id="Page-1"
+                            stroke="none"
+                            strokeWidth="1"
+                            fill="none"
+                            fillRule="evenodd"
                           >
                             <g
-                              id="icons"
-                              transform="translate(56.000000, 160.000000)"
+                              id="Dribbble-Light-Preview"
+                              transform="translate(-179.000000, -360.000000)"
+                              fill="#ffffff"
                             >
-                              <path
-                                d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
-                                id="delete-[#1487]"
-                              ></path>
+                              <g
+                                id="icons"
+                                transform="translate(56.000000, 160.000000)"
+                              >
+                                <path
+                                  d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 L128.25,206 L128.25,218 Z M130.35,204 L136.65,204 L136.65,202 L130.35,202 L130.35,204 Z M138.75,204 L138.75,200 L128.25,200 L128.25,204 L123,204 L123,206 L126.15,206 L126.15,220 L140.85,220 L140.85,206 L144,206 L144,204 L138.75,204 Z"
+                                  id="delete-[#1487]"
+                                ></path>
+                              </g>
                             </g>
                           </g>
-                        </g>
-                      </svg>
-                      <span>Delete</span>
-                    </Button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+                        </svg>
+                        <span>Delete</span>
+                      </Button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-start">
+          <Pagination>
+            {[...Array(Math.ceil(teamArray.length / teamsPerPage))].map(
+              (_, i) => (
+                <Pagination.Item
+                  key={i}
+                  active={i + 1 === currentPage}
+                  onClick={() => {
+                    paginate(i + 1);
+                  }}
+                >
+                  {i + 1}
+                </Pagination.Item>
+              )
+            )}
+          </Pagination>
+        </Col>
+      </Row>
       <Modal
         data-bs-theme="dark"
         show={showAddModal}

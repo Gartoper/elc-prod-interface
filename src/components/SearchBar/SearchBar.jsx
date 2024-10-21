@@ -18,6 +18,7 @@ export const SearchBar = forwardRef(function (props, searchBarRef) {
     const storedTeams = localStorage.getItem('allTeams');
     return storedTeams ? JSON.parse(storedTeams) : [];
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const storedTeams = localStorage.getItem('allTeams');
@@ -58,10 +59,11 @@ export const SearchBar = forwardRef(function (props, searchBarRef) {
 
   useEffect(() => {
     setFilteredResults(
-      allTeams.filter((team) =>
+      JSON.parse(localStorage.getItem('allTeams')).filter((team) =>
         team.name.toLowerCase().includes(search.toLowerCase())
       )
     );
+    setCurrentPage(1);
   }, [search]);
 
   useEffect(() => {
