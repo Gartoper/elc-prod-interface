@@ -22,8 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "predeploy": "npm run build",
-    "deploy:main": "npm run build && gh-pages -d build -b gh-pages -m 'Deploy main'",
-    "deploy:develop": "npm run build && gh-pages -d build -b gh-pages -m 'Deploy develop' --dest staging",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
